@@ -17,7 +17,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: '#14b8a6',
+  themeColor: '#0ea5e9',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -26,15 +29,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className="font-sans min-h-screen bg-background text-textMain antialiased">
         {children}
         <Toaster position="top-right" toastOptions={{
           style: {
-            background: '#1f2937',
-            color: '#fff',
-            border: '1px solid #374151',
-          }
+            background: '#ffffff',
+            color: '#0f172a',
+            border: '1px solid #f1f5f9',
+            borderRadius: '16px',
+            fontSize: '13px',
+            fontWeight: '600',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
+          },
+          duration: 4000,
         }} />
       </body>
     </html>

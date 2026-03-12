@@ -86,40 +86,40 @@ export default function BusMap({ trip, collegeId }: BusMapProps) {
          <LeafletMap liveLocation={liveLocation} trip={trip} />
       </div>
 
-      {/* Premium AI Overlay */}
-      <div className="absolute top-6 left-6 right-6 sm:right-auto sm:w-80 glass-panel p-6 shadow-2xl z-[1000] rounded-[32px] border-white/5 animate-in">
+      {/* Premium AI Overlay - Adapted for Light Theme */}
+      <div className="absolute top-4 left-4 right-4 sm:right-auto sm:w-72 glass-card p-5 shadow-2xl z-[1000] border-slate-100 bg-white/95 animate-in">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center space-x-3">
-            <div className={`p-3 rounded-2xl ${liveLocation ? 'bg-primary-500 text-slate-950 shadow-[0_0_20px_rgba(20,184,166,0.3)]' : 'bg-slate-800 text-gray-500'}`}>
-               <Clock className="w-6 h-6" />
+            <div className={`p-2.5 rounded-2xl ${liveLocation ? 'bg-primary-600 text-white shadow-lg shadow-primary-200' : 'bg-slate-100 text-slate-400'}`}>
+               <Clock className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-[10px] font-black text-primary-400 uppercase tracking-widest leading-none mb-1">AI Prediction</p>
-              <p className="font-bold text-2xl text-white tracking-tight leading-none">
-                 {liveLocation ? `~${eta} mins` : 'Waiting...'}
+            <div className="flex-1">
+              <p className="text-[10px] font-black text-primary-600 uppercase tracking-widest leading-none mb-1">AI Prediction</p>
+              <p className="font-black text-xl text-slate-900 tracking-tight leading-none">
+                 {liveLocation ? `~${eta} mins` : 'Signal Lost'}
               </p>
             </div>
           </div>
 
-          <div className="h-px bg-white/5 w-full"></div>
+          <div className="h-px bg-slate-100 w-full"></div>
 
           <div className="grid grid-cols-2 gap-4">
              <div>
-                <p className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Distance</p>
-                <p className="text-white font-bold">{distance ? `${distance} km` : '--'}</p>
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Remaining</p>
+                <p className="text-slate-700 font-bold text-sm tracking-tight">{distance ? `${distance} km` : '-- km'}</p>
              </div>
              <div>
-                <p className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Speed</p>
-                <p className="text-white font-bold">{liveLocation?.speed ? `${Math.round(liveLocation.speed)} km/h` : '0 km/h'}</p>
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Velocity</p>
+                <p className="text-slate-700 font-bold text-sm tracking-tight">{liveLocation?.speed ? `${Math.round(liveLocation.speed)} km/h` : '0 km/h'}</p>
              </div>
           </div>
 
           {liveLocation && (
-             <div className="pt-2">
-                <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                   <div className="bg-primary-500 h-full w-2/3 shadow-[0_0_10px_rgba(20,184,166,0.5)] animate-pulse"></div>
+             <div className="pt-1">
+                <div className="w-full bg-slate-50 h-1 rounded-full overflow-hidden border border-slate-100">
+                   <div className="bg-primary-500 h-full w-2/3 shadow-sm animate-pulse"></div>
                 </div>
-                <p className="text-[9px] text-primary-400/60 mt-2 text-center uppercase font-bold tracking-tighter">AI Core Analyzing Traffic Flow</p>
+                <p className="text-[8px] text-slate-400 mt-2 text-center uppercase font-black tracking-widest">Autonomous Telemetry Active</p>
              </div>
           )}
         </div>
