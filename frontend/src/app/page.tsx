@@ -3,92 +3,105 @@ import { Bus, ShieldAlert, Clock, MapPin } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main className="flex min-h-screen flex-col items-center bg-slate-950 text-textMain relative overflow-hidden font-sans">
+      {/* Absolute Decorative Elements */}
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-primary-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-teal-500/5 blur-[120px] rounded-full animate-pulse-slow font-bold" style={{ animationDelay: '4s' }}></div>
+
       {/* Hero Section */}
-      <div className="relative isolate w-full px-6 pt-14 lg:px-8">
-        <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-          <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#14b8a6] to-[#047857] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
-        </div>
-        
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
-          <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-            <div className="relative rounded-full px-5 py-1 text-sm leading-6 text-primary-500 ring-1 ring-white/10 hover:ring-white/20 glass-panel">
-              Multi-College Enterprise Architecture <a href="#features" className="font-semibold text-white ml-2"><span className="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>
+      <div className="relative isolate w-full px-6 pt-24 lg:px-8 z-10">
+        <div className="mx-auto max-w-4xl py-32 sm:py-48 text-center flex flex-col items-center">
+          <div className="animate-in mb-8">
+            <div className="inline-flex items-center space-x-3 rounded-2xl px-4 py-2 text-xs font-black uppercase tracking-[0.3em] text-primary-400 ring-1 ring-primary-500/30 bg-primary-500/5 backdrop-blur-md shadow-[0_0_20px_rgba(20,184,166,0.1)]">
+              <span>Enterprise Fleet Monitoring</span>
             </div>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl mb-6">
-            Smart Bus Tracking for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-teal-200">Modern Campuses</span>
+          
+          <h1 className="text-5xl font-black tracking-tighter text-white sm:text-8xl mb-8 leading-[0.9] animate-in" style={{ animationDelay: '0.1s' }}>
+            The Future of <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 via-primary-500 to-teal-200">Campus Transit</span>
           </h1>
-          <p className="mt-6 text-lg leading-8 text-textMuted">
-            Real-time GPS locations, AI-powered ETA predictions, and instant safety alerts. One platform to manage multiple colleges seamlessly.
+          
+          <p className="mt-4 text-xl leading-relaxed text-textMuted max-w-2xl font-medium animate-in" style={{ animationDelay: '0.2s' }}>
+            Empower your university with sub-second GPS tracking, AI-optimized route predictions, and proactive safety architecture. One unified platform, limitless scale.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link href="/login" className="rounded-md bg-primary-600 px-8 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(20,184,166,0.5)]">
-              Get Started
+          
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 animate-in" style={{ animationDelay: '0.3s' }}>
+            <Link href="/login" className="px-10 py-5 rounded-2xl bg-primary-500 text-slate-950 text-sm font-black uppercase tracking-widest hover:bg-primary-400 transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(20,184,166,0.3)] ring-1 ring-white/20">
+              Launch Dashboard
             </Link>
-            <Link href="#features" className="text-sm font-semibold leading-6 text-white hover:text-primary-500 transition-colors">
-              Learn more <span aria-hidden="true">→</span>
+            <Link href="#features" className="group text-sm font-bold uppercase tracking-widest leading-6 text-white flex items-center hover:text-primary-400 transition-colors">
+              Explore Intelligence <span aria-hidden="true" className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </Link>
           </div>
         </div>
       </div>
 
       {/* Feature Section */}
-      <div id="features" className="py-24 sm:py-32 w-full glass-panel">
+      <div id="features" className="py-24 sm:py-40 w-full relative z-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary-500">Deploy Faster</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Everything you need to track buses
-            </p>
-          </div>
-          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
-            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <div>
+              <h2 className="text-sm font-black uppercase tracking-[0.4em] text-primary-500 mb-6">Core Infrastructure</h2>
+              <p className="text-4xl font-bold tracking-tight text-white mb-8 leading-tight">
+                Engineered for <br/> Absolute Reliability.
+              </p>
               
-              <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-white">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 shadow-[0_0_15px_rgba(20,184,166,0.6)]">
-                    <MapPin className="h-6 w-6 text-white" />
+              <div className="space-y-12">
+                <div className="flex gap-6">
+                  <div className="flex-none w-14 h-14 bg-primary-500/10 rounded-2xl flex items-center justify-center ring-1 ring-primary-500/20 shadow-[0_0_20px_rgba(20,184,166,0.1)]">
+                    <MapPin className="h-7 w-7 text-primary-400" />
                   </div>
-                  Real-time Tracking
-                </dt>
-                <dd className="mt-2 text-base leading-7 text-textMuted">Sub-second latency GPS updates routed through Redis Pub/Sub directly to student devices.</dd>
-              </div>
-
-              <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-white">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 shadow-[0_0_15px_rgba(20,184,166,0.6)]">
-                    <Clock className="h-6 w-6 text-white" />
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Real-time Hyper-tracking</h3>
+                    <p className="text-textMuted leading-relaxed">Utilizing ultra-fast Redis caching and WebSocket streams for millisecond-level location fidelity.</p>
                   </div>
-                  AI ETA Prediction
-                </dt>
-                <dd className="mt-2 text-base leading-7 text-textMuted">Machine learning predicts arrival times by evaluating distance, historical data, and traffic conditions.</dd>
-              </div>
+                </div>
 
-              <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-white">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 shadow-[0_0_15px_rgba(20,184,166,0.6)]">
-                    <ShieldAlert className="h-6 w-6 text-white" />
+                <div className="flex gap-6">
+                  <div className="flex-none w-14 h-14 bg-primary-500/10 rounded-2xl flex items-center justify-center ring-1 ring-primary-500/20 shadow-[0_0_20px_rgba(20,184,166,0.1)]">
+                    <Clock className="h-7 w-7 text-primary-400" />
                   </div>
-                  Safety Alerts
-                </dt>
-                <dd className="mt-2 text-base leading-7 text-textMuted">Overspeeding alerts and emergency notifications sent via WebSockets, SMS, and Push Notifications.</dd>
-              </div>
-
-              <div className="relative pl-16">
-                <dt className="text-base font-semibold leading-7 text-white">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600 shadow-[0_0_15px_rgba(20,184,166,0.6)]">
-                    <Bus className="h-6 w-6 text-white" />
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Predictive AI Engine</h3>
+                    <p className="text-textMuted leading-relaxed">Proprietary algorithms analyze traffic density and historical trip data to provide accurate arrival windows.</p>
                   </div>
-                  Multi-Tenant
-                </dt>
-                <dd className="mt-2 text-base leading-7 text-textMuted">Isolated database access and discrete college codes to maintain strict security across distinct institutions.</dd>
+                </div>
               </div>
+            </div>
 
-            </dl>
+            <div className="relative group">
+               <div className="absolute -inset-1 bg-gradient-to-r from-primary-500 to-teal-500 rounded-[40px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+               <div className="relative p-8 glass-card rounded-[40px] border-white/5 bg-slate-900/40">
+                  <div className="flex items-center space-x-4 mb-8">
+                     <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
+                     <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                     <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+                  </div>
+                  <div className="space-y-6">
+                     <div className="h-4 bg-white/5 rounded-full w-3/4"></div>
+                     <div className="h-4 bg-white/5 rounded-full w-1/2"></div>
+                     <div className="h-32 bg-primary-500/5 rounded-[24px] border border-primary-500/10 flex items-center justify-center">
+                        <Bus className="w-12 h-12 text-primary-500/50 animate-pulse" />
+                     </div>
+                     <div className="h-4 bg-white/5 rounded-full w-5/6"></div>
+                  </div>
+               </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Footer Branding */}
+      <footer className="w-full py-12 border-t border-white/5 relative z-10 mt-auto">
+         <div className="mx-auto max-w-7xl px-6 flex justify-between items-center">
+            <div className="flex items-center space-x-3 opacity-50">
+               <Bus className="w-5 h-5" />
+               <span className="text-xs font-black uppercase tracking-[0.2em]">BusTracker AI</span>
+            </div>
+            <p className="text-[10px] text-textMuted font-bold uppercase tracking-widest">© 2026 Next-Gen Transit. All rights reserved.</p>
+         </div>
+      </footer>
     </main>
   );
 }
