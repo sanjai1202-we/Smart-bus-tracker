@@ -46,6 +46,16 @@ app.use('/api/buses', busRoutes);
 app.use('/api/trips', tripRoutes);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`[Backend] Server running on port ${PORT}`);
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Process] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[Process] Uncaught Exception thrown:', err);
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`[Backend] Server successfully started and listening on port ${PORT}`);
+  console.log(`[Backend] Service URL: ${process.env.RENDER_EXTERNAL_URL || 'localhost'}`);
 });
