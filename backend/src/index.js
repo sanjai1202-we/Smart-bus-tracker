@@ -19,7 +19,8 @@ const server = http.createServer(app);
 // Disabled helmet completely to avoid any devtools or CSP errors right now
 // app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: true, // Allow all origins to troubleshoot deployment
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 app.use(express.json());
