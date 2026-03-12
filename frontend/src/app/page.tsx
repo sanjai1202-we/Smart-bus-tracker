@@ -3,35 +3,35 @@ import { Bus, ShieldAlert, Clock, MapPin } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center bg-slate-950 text-textMain relative overflow-hidden font-sans">
+    <main className="flex min-h-screen flex-col items-center bg-background text-textMain relative overflow-hidden font-sans">
       {/* Absolute Decorative Elements */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-primary-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
-      <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-teal-500/5 blur-[120px] rounded-full animate-pulse-slow font-bold" style={{ animationDelay: '4s' }}></div>
+      <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary-100/40 blur-[120px] rounded-full animate-float"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-50/30 blur-[100px] rounded-full animate-float" style={{ animationDelay: '3s' }}></div>
 
       {/* Hero Section */}
       <div className="relative isolate w-full px-6 pt-24 lg:px-8 z-10">
         <div className="mx-auto max-w-4xl py-32 sm:py-48 text-center flex flex-col items-center">
           <div className="animate-in mb-8">
-            <div className="inline-flex items-center space-x-3 rounded-2xl px-4 py-2 text-xs font-black uppercase tracking-[0.3em] text-primary-400 ring-1 ring-primary-500/30 bg-primary-500/5 backdrop-blur-md shadow-[0_0_20px_rgba(20,184,166,0.1)]">
-              <span>Enterprise Fleet Monitoring</span>
+            <div className="inline-flex items-center space-x-3 rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] text-primary-600 ring-1 ring-primary-200 bg-primary-50/50 backdrop-blur-md shadow-sm">
+              <span>Next-Gen Fleet Intelligence</span>
             </div>
           </div>
           
-          <h1 className="text-5xl font-black tracking-tighter text-white sm:text-8xl mb-8 leading-[0.9] animate-in" style={{ animationDelay: '0.1s' }}>
-            The Future of <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-400 via-primary-500 to-teal-200">Campus Transit</span>
+          <h1 className="text-5xl font-black tracking-tight text-slate-900 sm:text-8xl mb-8 leading-[0.95] animate-in" style={{ animationDelay: '0.1s' }}>
+            Campus Transit, <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary-500 to-primary-700">Perfectly Synced.</span>
           </h1>
           
-          <p className="mt-4 text-xl leading-relaxed text-textMuted max-w-2xl font-medium animate-in" style={{ animationDelay: '0.2s' }}>
-            Empower your university with sub-second GPS tracking, AI-optimized route predictions, and proactive safety architecture. One unified platform, limitless scale.
+          <p className="mt-4 text-xl leading-relaxed text-slate-600 max-w-2xl font-medium animate-in" style={{ animationDelay: '0.2s' }}>
+            Elevate your university's mobility with real-time tracking, AI-powered predictive arrival times, and a seamless smart dashboard.
           </p>
           
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 animate-in" style={{ animationDelay: '0.3s' }}>
-            <Link href="/login" className="px-10 py-5 rounded-2xl bg-primary-500 text-slate-950 text-sm font-black uppercase tracking-widest hover:bg-primary-400 transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(20,184,166,0.3)] ring-1 ring-white/20">
-              Launch Dashboard
+            <Link href="/login" className="px-10 py-5 rounded-2xl bg-primary-600 text-white text-sm font-black uppercase tracking-widest hover:bg-primary-500 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary-200">
+              Get Started
             </Link>
-            <Link href="#features" className="group text-sm font-bold uppercase tracking-widest leading-6 text-white flex items-center hover:text-primary-400 transition-colors">
-              Explore Intelligence <span aria-hidden="true" className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            <Link href="#features" className="group text-sm font-bold uppercase tracking-widest leading-6 text-slate-900 flex items-center hover:text-primary-600 transition-colors">
+              Features <span aria-hidden="true" className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </Link>
           </div>
         </div>
@@ -41,50 +41,60 @@ export default function Home() {
       <div id="features" className="py-24 sm:py-40 w-full relative z-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div>
-              <h2 className="text-sm font-black uppercase tracking-[0.4em] text-primary-500 mb-6">Core Infrastructure</h2>
-              <p className="text-4xl font-bold tracking-tight text-white mb-8 leading-tight">
-                Engineered for <br/> Absolute Reliability.
-              </p>
+            <div className="space-y-12">
+              <div className="space-y-4">
+                <h2 className="text-sm font-black uppercase tracking-[0.4em] text-primary-600">Pure Precision</h2>
+                <p className="text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+                  Intelligent tracking <br/> for the modern campus.
+                </p>
+              </div>
               
-              <div className="space-y-12">
-                <div className="flex gap-6">
-                  <div className="flex-none w-14 h-14 bg-primary-500/10 rounded-2xl flex items-center justify-center ring-1 ring-primary-500/20 shadow-[0_0_20px_rgba(20,184,166,0.1)]">
-                    <MapPin className="h-7 w-7 text-primary-400" />
+              <div className="grid gap-10">
+                <div className="flex gap-6 group">
+                  <div className="flex-none w-14 h-14 bg-white rounded-2xl flex items-center justify-center ring-1 ring-slate-200 shadow-sm group-hover:shadow-md transition-all">
+                    <MapPin className="h-6 w-6 text-primary-500" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Real-time Hyper-tracking</h3>
-                    <p className="text-textMuted leading-relaxed">Utilizing ultra-fast Redis caching and WebSocket streams for millisecond-level location fidelity.</p>
+                    <h3 className="text-lg font-bold text-slate-900 mb-1 tracking-tight">Real-time Location Stream</h3>
+                    <p className="text-slate-500 leading-relaxed text-sm">Ultra-low latency GPS updates using high-performance Redis pub/sub architecture.</p>
                   </div>
                 </div>
 
-                <div className="flex gap-6">
-                  <div className="flex-none w-14 h-14 bg-primary-500/10 rounded-2xl flex items-center justify-center ring-1 ring-primary-500/20 shadow-[0_0_20px_rgba(20,184,166,0.1)]">
-                    <Clock className="h-7 w-7 text-primary-400" />
+                <div className="flex gap-6 group">
+                  <div className="flex-none w-14 h-14 bg-white rounded-2xl flex items-center justify-center ring-1 ring-slate-200 shadow-sm group-hover:shadow-md transition-all">
+                    <Clock className="h-6 w-6 text-primary-500" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Predictive AI Engine</h3>
-                    <p className="text-textMuted leading-relaxed">Proprietary algorithms analyze traffic density and historical trip data to provide accurate arrival windows.</p>
+                    <h3 className="text-lg font-bold text-slate-900 mb-1 tracking-tight">AI Estimated Arrival</h3>
+                    <p className="text-slate-500 leading-relaxed text-sm">Proprietary AI engine calculates ETA based on live speed and distance metrics.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="relative group">
-               <div className="absolute -inset-1 bg-gradient-to-r from-primary-500 to-teal-500 rounded-[40px] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-               <div className="relative p-8 glass-card rounded-[40px] border-white/5 bg-slate-900/40">
-                  <div className="flex items-center space-x-4 mb-8">
-                     <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                     <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                     <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+            <div className="relative group p-1 animate-float">
+               <div className="absolute -inset-2 bg-gradient-to-r from-primary-400 to-sky-300 rounded-[44px] blur-2xl opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+               <div className="relative p-10 glass-card border-slate-100 bg-white shadow-2xl">
+                  <div className="flex items-center space-x-3 mb-10">
+                     <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
+                     <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
+                     <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
                   </div>
-                  <div className="space-y-6">
-                     <div className="h-4 bg-white/5 rounded-full w-3/4"></div>
-                     <div className="h-4 bg-white/5 rounded-full w-1/2"></div>
-                     <div className="h-32 bg-primary-500/5 rounded-[24px] border border-primary-500/10 flex items-center justify-center">
-                        <Bus className="w-12 h-12 text-primary-500/50 animate-pulse" />
+                  <div className="space-y-8">
+                     <div className="h-3.5 bg-slate-100 rounded-full w-3/4"></div>
+                     <div className="h-3.5 bg-slate-100 rounded-full w-1/2"></div>
+                     <div className="py-12 bg-primary-50/50 rounded-3xl border border-primary-100 flex items-center justify-center overflow-hidden">
+                        <div className="bus-loading-container">
+                           <div className="bus-silhouette">
+                              <div className="bus-body">
+                                 <div className="bus-window"></div>
+                                 <div className="bus-wheel wheel-front"></div>
+                                 <div className="bus-wheel wheel-back"></div>
+                              </div>
+                           </div>
+                        </div>
                      </div>
-                     <div className="h-4 bg-white/5 rounded-full w-5/6"></div>
+                     <div className="h-3.5 bg-slate-100 rounded-full w-5/6"></div>
                   </div>
                </div>
             </div>
@@ -93,13 +103,13 @@ export default function Home() {
       </div>
 
       {/* Footer Branding */}
-      <footer className="w-full py-12 border-t border-white/5 relative z-10 mt-auto">
-         <div className="mx-auto max-w-7xl px-6 flex justify-between items-center">
-            <div className="flex items-center space-x-3 opacity-50">
-               <Bus className="w-5 h-5" />
-               <span className="text-xs font-black uppercase tracking-[0.2em]">BusTracker AI</span>
+      <footer className="w-full py-12 border-t border-slate-100 relative z-10 mt-auto bg-white/50 backdrop-blur-sm">
+         <div className="mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center space-x-3 grayscale opacity-60">
+               <Bus className="w-5 h-5 text-slate-900" />
+               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900">BusTracker System</span>
             </div>
-            <p className="text-[10px] text-textMuted font-bold uppercase tracking-widest">© 2026 Next-Gen Transit. All rights reserved.</p>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">© 2026 Campus Mobility. Defined by Design.</p>
          </div>
       </footer>
     </main>

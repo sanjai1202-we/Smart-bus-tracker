@@ -15,10 +15,10 @@ L.Icon.Default.mergeOptions({
 });
 
 const busIcon = L.divIcon({
-  html: `<div style="background-color: #14b8a6; color: white; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(20, 184, 166, 0.4); border: 2px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px);"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h10"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg></div>`,
+  html: `<div style="background-color: #0ea5e9; color: white; border-radius: 14px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3); border: 3px solid white;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h10"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg></div>`,
   className: "custom-bus-icon",
-  iconSize: [48, 48],
-  iconAnchor: [24, 24],
+  iconSize: [44, 44],
+  iconAnchor: [22, 22],
 });
 
 const userIcon = L.divIcon({

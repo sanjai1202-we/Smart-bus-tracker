@@ -42,76 +42,76 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-950 items-center justify-center p-6 relative overflow-hidden font-sans">
+    <div className="flex min-h-screen bg-background items-center justify-center p-6 relative overflow-hidden font-sans">
       {/* Background Ambience */}
-      <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-primary-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
-      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-teal-500/5 blur-[120px] rounded-full animate-pulse-slow" style={{ animationDelay: '3s' }}></div>
+      <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-primary-100 blur-[150px] rounded-full animate-float"></div>
+      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-primary-50 blur-[120px] rounded-full animate-float" style={{ animationDelay: '3s' }}></div>
 
-      <div className="w-full max-w-2xl p-10 relative z-10">
-        <div className="glass-card p-10 rounded-[48px] border-white/5 animate-in">
+      <div className="w-full max-w-2xl p-6 relative z-10">
+        <div className="glass-card p-10 border-slate-100 bg-white/80 shadow-2xl animate-in">
           <div className="text-center mb-10">
-             <div className="inline-flex items-center justify-center p-4 bg-primary-500/10 rounded-3xl mb-6 text-primary-400 ring-1 ring-primary-500/20 shadow-[0_0_30px_rgba(20,184,166,0.1)]">
+             <div className="inline-flex items-center justify-center p-4 bg-primary-50 rounded-3xl mb-6 text-primary-600 ring-1 ring-primary-100 shadow-sm">
               <UserCircle className="w-10 h-10" />
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-white mb-2">Join the Network</h1>
-            <p className="text-textMuted text-sm font-medium tracking-wide">Enter your details to register as a student.</p>
+            <h1 className="text-3xl font-black tracking-tight text-slate-900 mb-2">Create Account</h1>
+            <p className="text-slate-500 text-sm font-medium tracking-wide">Join your campus mobility network today.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-textMuted uppercase tracking-widest ml-1">Full Name</label>
-                <input type="text" name="name" required placeholder="John Doe" onChange={handleChange} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white font-medium transition-all placeholder:text-gray-600"/>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                <input type="text" name="name" required placeholder="John Doe" onChange={handleChange} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-slate-900 font-medium transition-all placeholder:text-slate-400"/>
               </div>
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-textMuted uppercase tracking-widest ml-1">College Code</label>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">College Code</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Building2 className="h-5 w-5 text-primary-500/50 group-focus-within:text-primary-500 transition-colors" />
+                    <Building2 className="h-5 w-5 text-primary-400 group-focus-within:text-primary-600 transition-colors" />
                   </div>
-                  <input type="text" name="college_code" required placeholder="DEMO-123" onChange={handleChange} className="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white font-medium transition-all placeholder:text-gray-600 uppercase tracking-wider"/>
+                  <input type="text" name="college_code" required placeholder="DEMO-123" onChange={handleChange} className="w-full pl-12 pr-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-slate-900 font-medium transition-all placeholder:text-slate-400 uppercase tracking-wider"/>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                 <label className="block text-xs font-bold text-textMuted uppercase tracking-widest ml-1">Email</label>
-                 <input type="email" name="email" required placeholder="name@college.edu" onChange={handleChange} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white font-medium transition-all placeholder:text-gray-600"/>
+                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                 <input type="email" name="email" required placeholder="name@college.edu" onChange={handleChange} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-slate-900 font-medium transition-all placeholder:text-slate-400"/>
               </div>
               <div className="space-y-2">
-                 <label className="block text-xs font-bold text-textMuted uppercase tracking-widest ml-1">Password</label>
-                 <input type="password" name="password" required placeholder="••••••••" onChange={handleChange} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white font-medium transition-all placeholder:text-gray-600"/>
+                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Secret Password</label>
+                 <input type="password" name="password" required placeholder="••••••••" onChange={handleChange} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-slate-900 font-medium transition-all placeholder:text-slate-400"/>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-textMuted uppercase tracking-widest ml-1">Your Contact</label>
-                <input type="tel" name="phone" required placeholder="+91 00000 00000" onChange={handleChange} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white font-medium transition-all placeholder:text-gray-600"/>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Personal Contact</label>
+                <input type="tel" name="phone" required placeholder="+91 00000 00000" onChange={handleChange} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-slate-900 font-medium transition-all placeholder:text-slate-400"/>
               </div>
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-textMuted uppercase tracking-widest ml-1">Parent Contact</label>
-                <input type="tel" name="parent_phone" required placeholder="+91 00000 00000" onChange={handleChange} className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white font-medium transition-all placeholder:text-gray-600"/>
+                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Parent Contact</label>
+                <input type="tel" name="parent_phone" required placeholder="+91 00000 00000" onChange={handleChange} className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 text-slate-900 font-medium transition-all placeholder:text-slate-400"/>
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="w-full mt-6 py-5 px-6 rounded-2xl text-sm font-black uppercase tracking-widest text-slate-950 bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all hover:scale-[1.01] active:scale-95 shadow-[0_20px_40px_rgba(20,184,166,0.2)] disabled:opacity-50">
-              {loading ? <Loader2 className="animate-spin w-5 h-5 mx-auto" /> : 'Complete Registration'}
+            <button type="submit" disabled={loading} className="w-full mt-6 py-5 px-6 rounded-2xl text-sm font-black uppercase tracking-widest text-white bg-primary-600 hover:bg-primary-500 focus:outline-none transition-all hover:scale-[1.01] active:scale-95 shadow-lg shadow-primary-200 disabled:opacity-50">
+              {loading ? <div className="bus-wheel w-6 h-6 border-2 border-white border-t-transparent animate-spin rounded-full mx-auto"></div> : 'Register Account'}
             </button>
           </form>
 
-          <div className="mt-12 pt-8 border-t border-white/5 text-center">
-            <p className="text-sm text-textMuted font-medium">
+          <div className="mt-12 pt-8 border-t border-slate-100 text-center">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">
               Already a member?{' '}
-              <Link href="/login" className="font-bold text-primary-500 hover:text-primary-400 transition-colors underline-offset-4 hover:underline">
-                Log in and track
+              <Link href="/login" className="text-primary-600 hover:text-primary-500 transition-colors uppercase">
+                Login
               </Link>
             </p>
           </div>
         </div>
         
-        <p className="mt-8 text-center text-[10px] font-bold text-textMuted/40 uppercase tracking-[0.3em] font-sans">
+        <p className="mt-8 text-center text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">
           Powered by Smart Mobility Systems
         </p>
       </div>

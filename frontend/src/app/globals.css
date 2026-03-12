@@ -3,17 +3,32 @@
 @tailwind utilities;
 
 :root {
-  --primary: 20, 184, 166;
-  --primary-glow: rgba(20, 184, 166, 0.3);
-  --background: 2, 6, 17;
+  --primary: 14, 165, 233;
+  --primary-soft: rgba(14, 165, 233, 0.1);
+  --background: 248, 250, 252;
+  --surface: 255, 255, 255;
+  --border: 226, 232, 240;
 }
 
+/* Leaflet Overrides */
+.leaflet-container {
+  background: #f8fafc !important;
+  font-family: inherit;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: white !important;
+  color: #0f172a !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid #e2e8f0;
+}
+
+
 body {
-  color: #f8fafc;
+  color: #0f172a;
   background-color: rgb(var(--background));
   background-image: 
-    radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.05) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, rgba(13, 148, 136, 0.05) 0, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.05) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, rgba(2, 132, 199, 0.03) 0, transparent 50%);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   margin: 0;
   padding: 0;
@@ -21,58 +36,72 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism Evolution */
+/* Premium Light Elevation */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgb(var(--border));
 }
 
 .glass-card {
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  background: var(--surface);
+  border: 1px solid rgb(var(--border));
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
 }
 
 .glass-card:hover {
-  background: rgba(30, 41, 59, 0.5);
-  border-color: rgba(20, 184, 166, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(20, 184, 166, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -10px rgba(14, 165, 233, 0.12);
+  border-color: rgba(14, 165, 233, 0.2);
 }
 
-.premium-stat-card {
-  @apply glass-card p-6 flex flex-col gap-2 relative overflow-hidden;
+/* Bus Loading Scene */
+.bus-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.premium-stat-card::before {
-  content: '';
+.bus-silhouette {
+  position: relative;
+  animation: busMove 3s ease-in-out infinite;
+}
+
+.bus-body {
+  width: 100px;
+  height: 40px;
+  background: rgb(var(--primary));
+  border-radius: 8px 12px 4px 4px;
+  position: relative;
+}
+
+.bus-window {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.5), transparent);
-  transform: translateX(-100%);
-  transition: 0.5s;
+  top: 8px;
+  left: 60px;
+  width: 30px;
+  height: 15px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 2px 6px 2px 2px;
 }
 
-.premium-stat-card:hover::before {
-  transform: translateX(100%);
+.bus-wheel {
+  position: absolute;
+  bottom: -6px;
+  width: 16px;
+  height: 16px;
+  background: #1e293b;
+  border: 3px dashed #64748b;
+  border-radius: 50%;
+  animation: wheelSpin 0.8s linear infinite;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-in {
-  animation: fadeIn 0.5s ease-out forwards;
-}
+.wheel-front { left: 15px; }
+.wheel-back { right: 15px; }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -82,21 +111,19 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 184, 166, 0.3);
+  background: rgba(14, 165, 233, 0.4);
 }
 
-/* Leaflet Overrides */
-.leaflet-container {
-  background: #020617 !important;
-  font-family: inherit;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.leaflet-popup-content-wrapper, .leaflet-popup-tip {
-  background: rgba(15, 23, 42, 0.9) !important;
-  color: white !important;
-  backdrop-filter: blur(10px);
+
+.animate-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
