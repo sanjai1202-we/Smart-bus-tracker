@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { Search, X, Lock, Key, Bus, MapPin, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type TabState = "sleep" | "track" | "driver";
 
@@ -15,6 +16,7 @@ export default function Home() {
   const [adminUsername, setAdminUsername] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -126,16 +128,24 @@ export default function Home() {
               <input
                 type="text"
                 value={searchQuery}
+                onKeyDown={(e) => { if (e.key === 'Enter') router.push('/student'); }}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Type stop: Ambur, Chennai..."
-                className="w-full h-14 pl-12 pr-12 bg-white rounded-full border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 text-[15px] font-medium placeholder-slate-400 transition-all"
+                className="w-full h-14 pl-12 pr-12 bg-white rounded-full border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 text-[15px] font-medium placeholder-slate-400 transition-all cursor-text pointer-events-auto"
               />
-              {searchQuery && (
+              {searchQuery ? (
                 <button
                   onClick={() => setSearchQuery("")}
                   className="absolute inset-y-0 right-4 flex items-center"
                 >
                   <X className="w-4 h-4 text-slate-400 hover:text-slate-600" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => router.push('/student')}
+                  className="absolute inset-y-0 right-4 flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-800"
+                >
+                   GO
                 </button>
               )}
             </div>
@@ -183,9 +193,9 @@ export default function Home() {
                 placeholder="e.g. 1234"
                 className="w-full h-14 px-5 bg-[#f8fafc] rounded-2xl border border-slate-200 mb-5 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 text-lg font-bold tracking-widest placeholder-slate-300 text-slate-700 transition-all text-center"
               />
-              <button className="w-full h-14 bg-[#eef1f5] hover:bg-slate-200 text-slate-700 font-bold rounded-2xl flex items-center justify-center space-x-2 transition-colors active:scale-[0.98]">
+              <button onClick={() => router.push('/login')} className="w-full h-14 bg-[#eef1f5] hover:bg-slate-200 text-slate-700 font-bold rounded-2xl flex items-center justify-center space-x-2 transition-colors active:scale-[0.98]">
                 <Key className="w-5 h-5 text-orange-400" />
-                <span className="text-[17px] text-indigo-700 font-black tracking-tight">Enter PIN</span>
+                <span className="text-[17px] text-indigo-700 font-black tracking-tight">Login Portal</span>
               </button>
             </div>
           </div>
@@ -240,9 +250,9 @@ export default function Home() {
                 />
               </div>
 
-              <button className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold h-14 rounded-xl flex items-center justify-center space-x-2 mt-4 transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] active:scale-[0.98]">
+              <button onClick={() => router.push('/login')} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold h-14 rounded-xl flex items-center justify-center space-x-2 mt-4 transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] active:scale-[0.98]">
                 <Key className="w-4 h-4 text-orange-200" />
-                <span className="tracking-wide">Sign In</span>
+                <span className="tracking-wide">Go to Login</span>
               </button>
             </div>
           </div>
