@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { Search, X, Lock, Key, Bus, MapPin, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 type TabState = "sleep" | "track" | "driver";
 
@@ -42,8 +43,7 @@ export default function Home() {
       {/* Top Navbar */}
       <nav className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-100 z-10 sticky top-0 md:px-6">
         <div className="flex items-center space-x-2">
-          <span className="text-2xl">🚌</span>
-          <span className="font-black text-xl text-indigo-700 tracking-tight">BusAlert</span>
+          <Image src="/logo.svg" alt="BusTracker Logo" width={44} height={44} className="rounded-xl shadow-sm border border-slate-200" priority />
         </div>
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1.5 px-3 py-1 bg-white border border-slate-200 rounded-full shadow-sm">

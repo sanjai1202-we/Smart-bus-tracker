@@ -1,0 +1,27 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="black" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="black" />
+  
+  <g stroke="white" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" fill="none">
+    <!-- Map Base -->
+    <path d="M40 100 L80 120 L120 100 L160 120 V80 L120 60 L80 80 L40 60 Z" />
+    <path d="M80 120 V80" />
+    <path d="M120 100 V60" />
+    
+    <!-- Pin Background to mask out map center -->
+    <path d="M100 130 C130 90 130 40 100 40 C70 40 70 90 100 130 Z" fill="black" stroke="white" stroke-width="5" />
+    
+    <!-- Bus outline -->
+    <rect x="83" y="60" width="34" height="16" rx="3" />
+    <!-- Bus stripe/windows -->
+    <path d="M83 68 H 117" stroke-width="3" />
+    <path d="M90 60 V 68 M100 60 V 68 M110 60 V 68" stroke-width="3" />
+    <!-- Wheels -->
+    <circle cx="92" cy="80" r="3" fill="black" />
+    <circle cx="108" cy="80" r="3" fill="black" />
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="165" font-family="serif" font-size="20" fill="white" text-anchor="middle" letter-spacing="1">BUS-TRACKER</text>
+  <text x="100" y="180" font-family="sans-serif" font-size="10" fill="#cccccc" text-anchor="middle" letter-spacing="0.5">Tracking buses in handsights</text>
+</svg>
