@@ -56,7 +56,7 @@ export default function RoutexApp() {
   if (!mounted) return null;
 
   return (
-    <main className="w-full h-screen bg-routex-dark selection:bg-routex-teal selection:text-routex-dark">
+    <main className="w-full h-screen bg-background selection:bg-routex-teal selection:text-routex-dark">
       <AnimatePresence mode="wait">
         {!authState.isAuthenticated && (
           <motion.div

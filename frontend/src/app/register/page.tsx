@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Building2, UserCircle, Mail, Lock, Phone, ArrowLeft } from 'lucide-react';
-import { GlassPanel, PrimaryButton, FloatingInput, MeshBackground } from '../components/ROUTEX/Primitives';
+import { GlassPanel, PrimaryButton, FloatingInput, MeshBackground } from '@/components/ROUTEX/Primitives';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -32,7 +32,7 @@ export default function Register() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 bg-routex-dark overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center p-6 bg-background overflow-hidden transition-colors duration-300">
       <MeshBackground variant="indigo" />
       
       <motion.div 
@@ -40,13 +40,13 @@ export default function Register() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl z-10"
       >
-        <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-routex-textMuted hover:text-white transition-colors mb-8">
+        <Link href="/" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-routex-textMuted hover:text-foreground transition-colors mb-8">
             <ArrowLeft className="w-4 h-4" /> Back to Portal
         </Link>
 
         <GlassPanel className="p-10 md:p-16">
           <header className="text-center mb-12">
-            <h1 className="text-4xl font-display tracking-[0.2em] text-white uppercase mb-4">Initialize Identity</h1>
+            <h1 className="text-4xl font-display tracking-[0.2em] text-foreground uppercase mb-4">Initialize Identity</h1>
             <p className="text-[10px] text-routex-textMuted uppercase tracking-[0.4em] opacity-60">Join the ROUTEX transit ecosystem</p>
           </header>
 
