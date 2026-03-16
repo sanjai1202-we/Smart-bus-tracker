@@ -2,88 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
+:root {
+  --background: #07071A;
+  --foreground: #F0F0FF;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-body overflow-x-hidden;
+  }
+}
+
+@layer components {
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3排%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mask-image: linear-gradient(to bottom, black, transparent);
+  }
+
+  .glass-panel {
+    @apply bg-routex-glass backdrop-blur-[20px] border border-routex-glassBorder rounded-[24px] shadow-2xl;
+  }
+
+  .animated-mesh {
+    background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #07071a 100%);
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .mesh-bloom-indigo {
+    background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.15) 0%, transparent 50%);
+  }
+
+  .mesh-bloom-amber {
+    background: radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%);
+  }
+
+  .mesh-bloom-red {
+    background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+  }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .text-shadow-glow {
-    text-shadow: 0 0 20px rgba(91, 78, 255, 0.8);
-  }
-
-  @keyframes sweep {
-    0% { transform: translateY(0); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(160px); opacity: 0; }
-  }
-
-  .animate-sweep {
-    animation: sweep 2s infinite linear;
-  }
-
-  @keyframes strobe {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .animate-strobe {
-    animation: strobe 1.5s infinite;
-  }
 }
 
-body {
-  background-color: #08080F;
-  color: #F0F0FF;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* 3D Flip Clock Styles */
+.flip-card {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .2), 0 2px 10px 0 rgba(0, 0, 0, .15);
+  border-radius: .15em;
+  font-size: 2rem;
 }
 
-/* Mapbox/Leaflet Dark Overrides */
-.leaflet-container {
-  background: #08080F !important;
-  font-family: inherit;
-}
-.leaflet-control-zoom, .leaflet-control-attribution {
-  display: none !important;
+.top, .bottom, .flip-card .current-digit {
+  height: .75em;
+  line-height: 1;
+  padding: .25em;
+  overflow: hidden;
 }
 
-.custom-tooltip {
-  background: rgba(0,0,0,0.8) !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-  color: white !important;
-  font-family: var(--font-jetbrains-mono) !important;
-  font-size: 10px !important;
-  font-weight: bold !important;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5) !important;
-  backdrop-filter: blur(10px);
-}
-.leaflet-tooltip-top:before {
-  border-top-color: rgba(0,0,0,0.8) !important;
+.top {
+  background-color: #333;
+  border-top-right-radius: .15em;
+  border-top-left-radius: .15em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Global scrollbar styling for web */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(91, 78, 255, 0.5);
-}
-
-::selection {
-  background: rgba(91, 78, 255, 0.5);
-  color: white;
+.bottom {
+  background-color: #333;
+  display: flex;
+  align-items: flex-end;
+  border-bottom-right-radius: .15em;
+  border-bottom-left-radius: .15em;
 }

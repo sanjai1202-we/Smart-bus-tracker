@@ -1,280 +1,283 @@
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, PlusCircle, Bell, ShieldAlert, Bus, Users, MapPin, Search, ChevronRight, Share2, Copy, CheckCircle, Database } from 'lucide-react';
-import { GlassCard, AnimatedButton } from './Shared';
+import { LayoutDashboard, Key, Bell, LogOut, Bus, Map as MapIcon, ShieldAlert, CheckCircle2, Copy, Send, Settings, Eye, Info } from 'lucide-react';
+import { GlassPanel, PrimaryButton, MeshBackground } from './Primitives';
 import toast from 'react-hot-toast';
 
 export default function AdminFlow({ onLogout }: any) {
-  const [activeTab, setActiveTab] = useState<'dash' | 'generate' | 'notifs'>('dash');
+  const [screen, setScreen] = useState<'dashboard' | 'generate' | 'notifications'>('dashboard');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const [generatedCode, setGeneratedCode] = useState("");
 
-  // Mock Stats
-  const stats = [
-    { label: 'Fleet Total', val: 24, icon: Bus, color: 'text-routex-primary' },
-    { label: 'Active Now', val: 12, icon: MapPin, color: 'text-routex-success' },
-    { label: 'Boarded Students', val: 540, icon: Users, color: 'text-routex-cyan' },
-    { label: 'Emergency Alerts', val: 2, icon: ShieldAlert, color: 'text-routex-danger' }
-  ];
-
-  const busList = [
-    { no: 'BUS001', route: 'Campus Outer', driver: 'S. Kumaar', status: 'LIVE', students: 42 },
-    { no: 'BUS007', route: 'Main Loop', driver: 'R. Rajan', status: 'LIVE', students: 38 },
-    { no: 'BUS012', route: 'City Link', driver: 'P. Singh', status: 'INACTIVE', students: 0 },
-    { no: 'BUS015', route: 'Suburban S.', driver: 'A. Rahul', status: 'DELAYED', students: 25 },
-  ];
-
-  const handleGenerateCode = () => {
+  const generateCode = (e: any) => {
+    e.preventDefault();
     setIsGenerating(true);
-    setGeneratedCode(null);
+    setGeneratedCode("");
+    
     setTimeout(() => {
       setIsGenerating(false);
-      setGeneratedCode("RX740B");
-      toast.success("Bus Initialized ✓");
-    }, 2000);
+      setGeneratedCode("BUS008");
+      toast.success("Identity Key Serialized");
+    }, 2500);
   };
 
+  const navItems = [
+    { id: 'dashboard', icon: LayoutDashboard, label: 'COMMAND' },
+    { id: 'generate', icon: Key, label: 'INITIALIZE' },
+    { id: 'notifications', icon: Bell, label: 'ALERTS' }
+  ];
+
   return (
-    <div className="relative w-full h-[100dvh] bg-routex-bg overflow-hidden font-body text-white flex flex-col md:flex-row">
+    <div className="relative min-h-screen bg-routex-dark text-white p-6 md:p-10">
+      <MeshBackground variant={screen === 'dashboard' ? 'indigo' : screen === 'generate' ? 'teal' : 'red'} />
+      <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none z-50 mix-blend-overlay" />
       
-      {/* Sidebar Navigation */}
-      <nav className="w-full md:w-20 bg-black/40 backdrop-blur-3xl border-b md:border-b-0 md:border-r border-white/10 flex md:flex-col items-center py-4 md:py-8 justify-between z-50">
-         <div className="flex md:flex-col items-center gap-8 px-6 md:px-0">
-            <div className="w-12 h-12 bg-routex-primary rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(91,78,255,0.4)]">
-               <Bus className="w-7 h-7 text-white" />
-            </div>
-            
-            <div className="flex md:flex-col gap-6">
-               <button onClick={() => setActiveTab('dash')} className={`p-3 rounded-xl transition-all ${activeTab === 'dash' ? 'bg-white/10 text-white' : 'text-routex-textMuted hover:text-white'}`}>
-                  <LayoutDashboard className="w-6 h-6" />
-               </button>
-               <button onClick={() => setActiveTab('generate')} className={`p-3 rounded-xl transition-all ${activeTab === 'generate' ? 'bg-white/10 text-white' : 'text-routex-textMuted hover:text-white'}`}>
-                  <PlusCircle className="w-6 h-6" />
-               </button>
-               <button onClick={() => setActiveTab('notifs')} className={`p-3 rounded-xl transition-all ${activeTab === 'notifs' ? 'bg-white/10 text-white relative' : 'text-routex-textMuted hover:text-white'}`}>
-                  <Bell className="w-6 h-6" />
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-routex-danger rounded-full shadow-[0_0_10px_#FF4E4E]" />
-               </button>
-            </div>
-         </div>
-         
-         <button onClick={onLogout} className="px-6 md:px-0 text-routex-danger opacity-40 hover:opacity-100 transition-all">
-            <LogOut className="w-6 h-6" />
-         </button>
+      {/* Sidebar / Top Nav */}
+      <nav className="fixed bottom-0 left-0 right-0 md:top-10 md:left-10 md:bottom-10 md:w-20 bg-white/5 backdrop-blur-2xl border-t md:border border-white/10 rounded-t-[30px] md:rounded-[30px] z-50 flex md:flex-col items-center justify-around py-6 overflow-hidden">
+        <div className="hidden md:flex flex-col items-center mb-10 opacity-50">
+           <Bus className="w-8 h-8 text-routex-primary" />
+        </div>
+        
+        {navItems.map(item => (
+          <button
+            key={item.id}
+            onClick={() => setScreen(item.id as any)}
+            className={`relative p-4 md:p-5 rounded-2xl transition-all ${screen === item.id ? 'bg-routex-primary/20 text-white border border-routex-primary/40' : 'text-routex-textMuted hover:text-white'}`}
+          >
+            <item.icon className="w-6 h-6" />
+            <span className="hidden md:block absolute left-24 px-4 py-2 bg-black/80 rounded-xl text-[10px] uppercase font-black tracking-widest opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">{item.label}</span>
+          </button>
+        ))}
+
+        <button onClick={onLogout} className="mt-auto p-4 md:p-5 text-routex-danger hover:bg-routex-danger/10 rounded-2xl transition-all">
+          <LogOut className="w-6 h-6" />
+        </button>
       </nav>
 
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-6 md:p-12 relative">
-         <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-routex-primary/5 blur-[150px] pointer-events-none" />
-         
-         <header className="mb-12">
-            <p className="text-[10px] text-routex-textMuted font-black uppercase tracking-[0.5em] mb-2">Command Center Dashboard</p>
-            <h1 className="text-5xl font-display tracking-widest uppercase">
-               System {activeTab === 'dash' ? 'Intelligence' : activeTab === 'generate' ? 'Deployment' : 'Alerts'}
-            </h1>
-         </header>
+      <main className="md:pl-32 pb-24 md:pb-0">
+        <header className="flex justify-between items-center mb-12">
+           <div>
+             <h1 className="text-5xl font-display tracking-[0.2em] mb-2 uppercase">{screen}</h1>
+             <p className="text-[10px] text-routex-textMuted uppercase tracking-widest font-black opacity-60">ADMIN PORTAL / COLLEGE TRANSIT OPS</p>
+           </div>
+           
+           <div className="flex items-center gap-6">
+              <div className="hidden sm:flex flex-col text-right">
+                <span className="text-xs font-bold uppercase tracking-widest">SYSTEM OVERWATCH</span>
+                <span className="text-[9px] text-routex-teal uppercase font-black tracking-[.3em] font-mono">STATUS: OPTIMAL ●</span>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                 <Settings className="w-6 h-6 text-white/50" />
+              </div>
+           </div>
+        </header>
 
-         <AnimatePresence mode="wait">
-            
-            {/* Tab 1: Dashboard */}
-            {activeTab === 'dash' && (
-               <motion.div key="dash" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-12">
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                     {stats.map((stat, i) => (
-                        <motion.div 
-                           key={stat.label} 
-                           initial={{ opacity: 0, y: 20 }} 
-                           animate={{ opacity: 1, y: 0 }} 
-                           transition={{ delay: i * 0.1 }}
-                        >
-                           <GlassCard className="p-6">
-                              <stat.icon className={`w-8 h-8 mb-4 ${stat.color} opacity-40`} />
-                              <h3 className="text-4xl font-display tracking-tight mb-1">{stat.val}</h3>
-                              <p className="text-[10px] text-routex-textMuted uppercase font-black tracking-widest">{stat.label}</p>
-                           </GlassCard>
-                        </motion.div>
+        <AnimatePresence mode="wait">
+          {screen === 'dashboard' && (
+            <motion.div key="dash" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.05 }} className="space-y-8">
+               {/* Stat Cards */}
+               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { label: 'Total Fleet', value: '12', color: 'text-routex-primary', icon: Bus },
+                    { label: 'Live Signals', value: '07', color: 'text-routex-teal', icon: Navigation, pulse: true },
+                    { label: 'Manifest Count', value: '284', color: 'text-routex-primary', icon: CheckCircle2 },
+                    { label: 'Active Alerts', value: '03', color: 'text-routex-danger', icon: ShieldAlert }
+                  ].map((stat, i) => (
+                    <GlassPanel key={i} className="group relative overflow-hidden border-white/5">
+                       <div className="absolute top-0 left-0 w-1 h-full bg-routex-primary/30" />
+                       <div className="flex justify-between items-start mb-4">
+                          <stat.icon className={`w-6 h-6 ${stat.color} ${stat.pulse ? 'animate-pulse' : ''}`} />
+                          <span className="text-[9px] font-black text-white/30 tracking-widest">+12% / 24H</span>
+                       </div>
+                       <h3 className="text-4xl font-mono font-bold tracking-tighter mb-1">{stat.value}</h3>
+                       <p className="text-[10px] text-routex-textMuted uppercase font-black tracking-widest">{stat.label}</p>
+                    </GlassPanel>
+                  ))}
+               </div>
+
+               {/* Fleet Map */}
+               <GlassPanel className="h-[500px] p-0 overflow-hidden relative grayscale contrast-125 brightness-50">
+                  <div className="w-full h-full bg-slate-900/50 flex flex-col items-center justify-center">
+                     <div className="relative">
+                        <span className="text-white/10 font-display text-[15vw] select-none">FLEET MAP</span>
+                        {/* Simulated Bus Dots */}
+                        <motion.div animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 2, repeat: Infinity }} className="absolute top-[20%] left-[30%] w-4 h-4 bg-routex-teal rounded-full shadow-[0_0_20px_rgba(6,239,197,1)]" />
+                        <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 3, repeat: Infinity }} className="absolute top-[60%] right-[40%] w-4 h-4 bg-routex-teal rounded-full shadow-[0_0_20px_rgba(6,239,197,1)]" />
+                        <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2.5, repeat: Infinity }} className="absolute bottom-[20%] left-[50%] w-4 h-4 bg-routex-primary rounded-full shadow-[0_0_20px_rgba(79,70,229,1)]" />
+                     </div>
+                  </div>
+                  <div className="absolute top-6 left-6 z-10 flex gap-2">
+                     {['LIVE ONLY', 'ALL BUSES', 'HISTORY'].map(filter => (
+                        <button key={filter} className="px-4 py-2 bg-black/60 border border-white/10 rounded-xl text-[9px] font-black tracking-widest hover:border-routex-primary transition-all uppercase">{filter}</button>
                      ))}
                   </div>
+               </GlassPanel>
 
-                  {/* Main Command Surface */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                     {/* Map Column */}
-                     <div className="lg:col-span-2 space-y-6">
-                        <GlassCard className="h-[400px] relative overflow-hidden group">
-                           <div className="absolute inset-0 opacity-40 bg-[url('https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png')] bg-cover" />
-                           <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent flex justify-between items-end">
-                              <div>
-                                 <h4 className="text-lg font-display tracking-wide">Deployment Clusters</h4>
-                                 <p className="text-xs text-routex-textMuted">Live positional stream synced with Redis PubSub</p>
-                              </div>
-                              <button className="bg-white/5 p-3 rounded-xl border border-white/10 text-white/40">Enter Command Center Panel</button>
-                           </div>
-                           {/* Simulated Bus Dots */}
-                           <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute top-1/4 left-1/3 w-4 h-4 bg-routex-success rounded-full shadow-[0_0_20px_#00E87A] border-2 border-white" />
-                           <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2, delay: 0.5 }} className="absolute bottom-1/3 right-1/4 w-4 h-4 bg-routex-success rounded-full shadow-[0_0_20px_#00E87A] border-2 border-white" />
-                           <div className="absolute top-1/2 left-1/2 w-4 h-4 bg-gray-500 rounded-full border-2 border-white/20" />
-                        </GlassCard>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                           <GlassCard className="p-6 border-routex-cyan/20 bg-routex-cyan/5">
-                              <h4 className="text-xs uppercase font-black tracking-widest text-routex-cyan mb-4">Traffic Optimization</h4>
-                              <p className="text-sm font-medium mb-6">AI detected congestion on Route A. Generating reroute tokens for all active drivers.</p>
-                              <AnimatedButton className="!py-3 !text-[10px] bg-routex-cyan text-black">Force Reroute Protocol</AnimatedButton>
-                           </GlassCard>
-                           <GlassCard className="p-6 border-routex-primary/20 bg-routex-primary/5">
-                              <h4 className="text-xs uppercase font-black tracking-widest text-routex-primary mb-4">System Health</h4>
-                              <div className="flex items-end justify-between">
-                                 <div className="flex gap-1">
-                                    {[20, 40, 60, 30, 80, 50, 90].map((h, i) => (
-                                       <div key={i} className="w-1.5 bg-routex-primary opacity-40 rounded-full" style={{ height: h + '%' }} />
-                                    ))}
-                                 </div>
-                                 <span className="text-2xl font-mono text-routex-primary">99.9%</span>
-                              </div>
-                           </GlassCard>
-                        </div>
-                     </div>
-
-                     {/* List Column */}
-                     <div className="space-y-6">
-                        <header className="flex justify-between items-center">
-                           <h3 className="text-sm font-black uppercase tracking-[0.2em]">Fleet Monitor</h3>
-                           <div className="flex bg-white/5 rounded-lg p-1">
-                             <input type="text" placeholder="SEARCH BUS" className="bg-transparent text-[10px] px-3 font-mono outline-none w-24" />
-                             <Search className="w-4 h-4 text-routex-textMuted" />
-                           </div>
-                        </header>
-                        
-                        <div className="space-y-3">
-                           {busList.map((bus, i) => (
-                              <motion.div key={bus.no} initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1 }}>
-                                 <GlassCard className="p-4 hover:border-white/20 transition-all cursor-pointer group">
-                                    <div className="flex justify-between items-center">
-                                       <div className="flex items-center gap-3">
-                                          <div className={`w-2 h-2 rounded-full ${bus.status === 'LIVE' ? 'bg-routex-success shadow-[0_0_10px_#00E87A]' : 'bg-routex-textMuted opacity-20'}`} />
-                                          <div>
-                                             <p className="text-[10px] text-routex-textMuted font-black uppercase tracking-widest">{bus.no}</p>
-                                             <p className="text-sm font-bold tracking-tight">{bus.route}</p>
-                                          </div>
-                                       </div>
-                                       <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                                    </div>
-                                    <div className="mt-4 pt-4 border-t border-white/5 flex justify-between">
-                                       <span className="text-[9px] text-routex-textMuted uppercase font-black tracking-widest">Boarded: {bus.students}</span>
-                                       <span className="text-[9px] text-routex-textMuted uppercase font-black tracking-widest">DR: {bus.driver}</span>
-                                    </div>
-                                 </GlassCard>
-                              </motion.div>
-                           ))}
-                        </div>
+               {/* Bus List */}
+               <GlassPanel className="p-8">
+                  <div className="flex justify-between items-center mb-8">
+                     <h3 className="text-2xl font-display font-bold tracking-widest uppercase">Fleet Inventory</h3>
+                     <div className="flex gap-4">
+                        <button className="text-[10px] font-black uppercase tracking-widest text-routex-textMuted hover:text-white transition-all">Export CVS</button>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-routex-primary">Refresh Cluster</button>
                      </div>
                   </div>
-               </motion.div>
-            )}
+                  <div className="overflow-x-auto overflow-y-hidden">
+                     <table className="w-full text-left">
+                        <thead className="border-b border-white/10">
+                           <tr className="text-[10px] text-white/40 uppercase font-black tracking-[0.3em]">
+                              <th className="pb-4 pr-12">BUS ID</th>
+                              <th className="pb-4">ROUTE VECTOR</th>
+                              <th className="pb-4">COMMANDER</th>
+                              <th className="pb-4">STATUS</th>
+                              <th className="pb-4 text-right">CAPACITY</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {[
+                             { id: 'BUS007', route: 'ANNA NAGAR → SVC', driver: 'RAJAN KUMAR', status: 'LIVE', color: 'text-routex-teal' },
+                             { id: 'BUS002', route: 'KOYAMBEDU → SVC', driver: 'AMIT SINGH', status: 'DELAYED', color: 'text-routex-amber' },
+                             { id: 'BUS009', route: 'VADAPALANI → SVC', driver: 'KARAN MEHRA', status: 'LIVE', color: 'text-routex-teal' },
+                             { id: 'BUS012', route: 'KK NAGAR → SVC', driver: 'NEHA SHARMA', status: 'INACTIVE', color: 'text-white/20' }
+                           ].map((bus, i) => (
+                             <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-all group">
+                                <td className="py-6 font-mono text-xs font-bold tracking-widest">{bus.id}</td>
+                                <td className="py-6 text-[10px] font-black uppercase tracking-widest opacity-70">{bus.route}</td>
+                                <td className="py-6 text-[10px] font-black uppercase tracking-widest opacity-70">{bus.driver}</td>
+                                <td className="py-6">
+                                   <div className={`flex items-center gap-2 text-[9px] font-black uppercase tracking-widest ${bus.color}`}>
+                                      <span className={`w-1.5 h-1.5 rounded-full bg-current ${bus.status !== 'INACTIVE' ? 'animate-pulse' : ''}`} />
+                                      {bus.status}
+                                   </div>
+                                </td>
+                                <td className="py-6 text-right">
+                                   <button className="p-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/10 rounded-lg">
+                                      <Eye className="w-4 h-4 text-white/50" />
+                                   </button>
+                                </td>
+                             </tr>
+                           ))}
+                        </tbody>
+                     </table>
+                  </div>
+               </GlassPanel>
+            </motion.div>
+          )}
 
-            {/* Tab 2: Generate Code */}
-            {activeTab === 'generate' && (
-               <motion.div key="generate" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="max-w-xl">
-                  <GlassCard className="p-12">
-                     <div className="space-y-8">
-                        <div>
-                           <label className="text-[10px] text-routex-textMuted uppercase font-black tracking-[0.2em] mb-4 block">Registration Data</label>
-                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <input type="text" placeholder="BUS NUMBER (e.g. TN-01-AB)" className="bg-white/5 border border-white/10 px-5 py-4 rounded-2xl w-full outline-none focus:border-routex-primary transition-all font-bold tracking-widest uppercase text-xs" />
-                              <input type="text" placeholder="DRIVER NAME" className="bg-white/5 border border-white/10 px-5 py-4 rounded-2xl w-full outline-none focus:border-routex-primary transition-all font-bold tracking-widest uppercase text-xs" />
-                           </div>
-                        </div>
+          {screen === 'generate' && (
+            <motion.div key="gen" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="flex justify-center items-start pt-10">
+               <GlassPanel className="w-full max-w-2xl p-12">
+                  <header className="mb-12">
+                     <h3 className="text-3xl font-display tracking-widest uppercase mb-2">INITIALIZE NEW ROUTE</h3>
+                     <p className="text-[10px] text-white/30 uppercase tracking-[0.2em]">Generate dynamic authentication vector for driver deployment</p>
+                  </header>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                           <input type="text" placeholder="FROM ORIGIN" className="bg-white/5 border border-white/10 px-5 py-4 rounded-2xl w-full outline-none focus:border-routex-primary transition-all font-bold uppercase text-xs" />
-                           <input type="text" placeholder="DESTINATION" className="bg-white/5 border border-white/10 px-5 py-4 rounded-2xl w-full outline-none focus:border-routex-primary transition-all font-bold uppercase text-xs" />
-                        </div>
-
-                        <div className="flex gap-6 items-end">
-                           <div className="flex-1">
-                              <label className="text-[10px] text-routex-textMuted uppercase font-black tracking-[0.2em] mb-2 block">Payload Capacity</label>
-                              <div className="bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between p-2">
-                                 <button className="w-10 h-10 bg-white/5 rounded-xl text-xl">−</button>
-                                 <span className="text-lg font-mono font-bold">40</span>
-                                 <button className="w-10 h-10 bg-white/5 rounded-xl text-xl">+</button>
-                              </div>
-                           </div>
-                           <AnimatedButton onClick={handleGenerateCode} className="flex-1 !py-4" disabled={isGenerating}>
-                              {isGenerating ? "Executing..." : "Initialize Route"}
-                           </AnimatedButton>
-                        </div>
-
-                        <AnimatePresence>
-                           {generatedCode && (
-                              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="pt-8 border-t border-white/5">
-                                 <div className="bg-routex-primary/10 border border-routex-primary/30 p-8 rounded-3xl flex flex-col items-center">
-                                    <p className="text-[10px] text-routex-primary font-black uppercase tracking-[0.4em] mb-6 animate-pulse">Session Access Code Generated</p>
-                                    <h2 className="text-8xl font-mono font-black tracking-[0.2em] text-white flex items-center gap-1">
-                                       {generatedCode.split('').map((char, i) => (
-                                          <motion.span 
-                                             key={i} 
-                                             initial={{ rotateX: 90 }} 
-                                             animate={{ rotateX: 0 }} 
-                                             transition={{ delay: 0.5 + i * 0.1, duration: 0.5, type: 'spring' }}
-                                          >
-                                             {char}
-                                          </motion.span>
-                                       ))}
-                                    </h2>
-                                    <div className="mt-8 flex gap-4 w-full">
-                                       <button className="flex-1 bg-white/5 hover:bg-white/10 py-3 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all">
-                                          <Copy className="w-4 h-4" /> Copy ID
-                                       </button>
-                                       <button className="flex-1 bg-routex-primary py-3 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest">
-                                          <Share2 className="w-4 h-4" /> Share to DR
-                                       </button>
-                                    </div>
-                                 </div>
-                              </motion.div>
-                           )}
-                        </AnimatePresence>
+                  <form onSubmit={generateCode} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                     <div className="space-y-6">
+                        <InputGroup label="BUS IDENTIFICATION" placeholder="TN 01 AB 1234" />
+                        <InputGroup label="ORIGIN VECTOR" placeholder="LOCATION A" />
+                        <InputGroup label="DESTINATION" placeholder="LOCATION B" />
                      </div>
-                  </GlassCard>
-               </motion.div>
-            )}
-
-            {/* Tab 3: Notifications */}
-            {activeTab === 'notifs' && (
-               <motion.div key="notifs" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="max-w-2xl space-y-4">
-                  {[
-                     { type: 'SOS', student: 'Amit R.', bus: 'BUS007', time: '2m ago', active: true },
-                     { type: 'MISSED', student: 'Siddharth M.', bus: 'BUS001', time: '15m ago', active: true },
-                     { type: 'SYSTEM', msg: 'Core Engine Buffer Cleared', time: '1h ago', active: false },
-                  ].map((notif, i) => (
-                     <GlassCard key={i} className={`p-6 border-l-4 ${notif.type === 'SOS' ? 'border-routex-danger' : notif.type === 'MISSED' ? 'border-routex-amber' : 'border-routex-primary'} ${!notif.active ? 'opacity-40 grayscale' : ''}`}>
-                        <div className="flex justify-between items-start">
-                           <div className="flex gap-4">
-                              <div className={`p-3 rounded-xl bg-white/5 ${notif.type === 'SOS' ? 'text-routex-danger' : notif.type === 'MISSED' ? 'text-routex-amber' : 'text-routex-primary'}`}>
-                                 {notif.type === 'SOS' ? <ShieldAlert className="w-6 h-6" /> : notif.type === 'MISSED' ? <Users className="w-6 h-6" /> : <Database className="w-6 h-6" />}
-                              </div>
-                              <div>
-                                 <p className="text-[10px] font-black uppercase tracking-widest text-routex-textMuted mb-1">{notif.type} PROTOCOL</p>
-                                 <h4 className="text-xl font-display tracking-tight">{notif.student || notif.msg}</h4>
-                                 <p className="text-xs text-routex-textMuted mt-1">{notif.bus ? `Impacted Vessel: ${notif.bus}` : 'System Maintenance'}</p>
-                              </div>
-                           </div>
-                           <span className="text-[10px] font-mono text-routex-textMuted">{notif.time}</span>
+                     <div className="space-y-6">
+                        <InputGroup label="ASSIGNED COMMANDER" placeholder="DRIVER NAME" />
+                        <InputGroup label="CONTACT FREQUENCY" placeholder="+91 XXXXX XXXXX" />
+                        <div className="grid grid-cols-2 gap-4">
+                           <InputGroup label="CAPACITY" placeholder="40" />
+                           <InputGroup label="ETA START" placeholder="07:30 AM" />
                         </div>
-                        {notif.active && (
-                           <div className="mt-6 flex gap-3">
-                              <button className="flex-1 bg-white/5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">Intercept Alert</button>
-                              <button onClick={() => toast.success("Marked as Resolved")} className="flex-1 bg-routex-success/20 border border-routex-success/30 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest text-routex-success">Resolve Case</button>
-                           </div>
-                        )}
-                     </GlassCard>
-                  ))}
-               </motion.div>
-            )}
+                     </div>
+                     
+                     <div className="md:col-span-2 pt-6">
+                        <PrimaryButton disabled={isGenerating} type="submit" variant="teal">
+                          {isGenerating ? 'SERIALIZING NODE...' : 'GENERATE VECTOR CODE'}
+                        </PrimaryButton>
+                     </div>
+                  </form>
 
-         </AnimatePresence>
+                  <AnimatePresence>
+                     {generatedCode && (
+                       <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="p-8 bg-routex-teal/10 border border-routex-teal/30 rounded-3xl text-center">
+                          <p className="text-[10px] text-routex-teal uppercase font-black tracking-[0.4em] mb-4">DEPLOYMENT ACCESS CODE</p>
+                          <div className="flex justify-center items-center gap-6 mb-8">
+                             {generatedCode.split('').map((char, i) => (
+                               <motion.div 
+                                 key={i}
+                                 initial={{ rotateX: 90 }}
+                                 animate={{ rotateX: 0 }}
+                                 transition={{ delay: i * 0.1, duration: 0.5, type: 'spring' }}
+                                 className="w-16 h-20 bg-routex-dark border-2 border-routex-teal/40 rounded-xl flex items-center justify-center text-4xl font-mono text-white"
+                               >
+                                 {char}
+                               </motion.div>
+                             ))}
+                          </div>
+                          <div className="flex justify-center gap-4">
+                             <button onClick={() => toast.success("Copied to Clipboard")} className="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">
+                               <Copy className="w-4 h-4" /> COPY
+                             </button>
+                             <button onClick={() => toast.success("Transmitted via Secure SMS")} className="flex items-center gap-2 px-6 py-3 bg-routex-teal/20 border border-routex-teal/40 rounded-xl text-[10px] font-black uppercase tracking-widest text-routex-teal hover:bg-routex-teal/30 transition-all">
+                               <Send className="w-4 h-4" /> SHARE TO DRIVER
+                             </button>
+                          </div>
+                       </motion.div>
+                     )}
+                  </AnimatePresence>
+               </GlassPanel>
+            </motion.div>
+          )}
+
+          {screen === 'notifications' && (
+            <motion.div key="notif" initial={{ opacity: 0, filter: 'blur(20px)' }} animate={{ opacity: 1, filter: 'blur(0px)' }} exit={{ opacity: 0 }} className="space-y-6">
+               <div className="flex gap-4 mb-4">
+                  {['ALL', 'SOS', 'MISSED', 'RESOLVED'].map(tab => (
+                    <button key={tab} className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black uppercase tracking-[0.3em] hover:border-routex-primary transition-all">{tab}</button>
+                  ))}
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {[
+                    { type: 'SOS', user: 'Priya Sharma', bus: 'BUS007', stop: 'Anna Nagar Loop', time: '14:31 PM', urgent: true },
+                    { type: 'MISSED', user: 'Arjun Mehra', bus: 'BUS007', stop: 'Koyambedu Hub', time: '14:35 PM', urgent: false },
+                    { type: 'STATUS', user: 'Rajan Kumar', bus: 'BUS007', info: 'Route Half Completed', time: '14:40 PM', urgent: false }
+                  ].map((alert, i) => (
+                    <GlassPanel key={i} className={`p-8 border-l-4 ${alert.type === 'SOS' ? 'border-routex-danger' : alert.type === 'MISSED' ? 'border-routex-amber' : 'border-routex-teal'}`}>
+                       <div className="flex justify-between items-start mb-6">
+                          <span className={`px-2 py-1 rounded text-[8px] font-black tracking-widest ${alert.type === 'SOS' ? 'bg-routex-danger/20 text-routex-danger' : alert.type === 'MISSED' ? 'bg-routex-amber/20 text-routex-amber' : 'bg-routex-teal/20 text-routex-teal'}`}>{alert.type} ALERT</span>
+                          <span className="text-[10px] font-mono text-white/30">{alert.time}</span>
+                       </div>
+                       <h4 className="text-xl font-display tracking-widest mb-1 uppercase">{alert.user}</h4>
+                       <p className="text-[9px] text-routex-textMuted uppercase tracking-widest mb-6">{alert.bus} / {alert.stop || alert.info}</p>
+                       <div className="flex gap-3">
+                          <button onClick={() => toast.success("Marked as Resolved")} className="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">RESOLVE</button>
+                          <button className="p-3 bg-routex-primary/20 border border-routex-primary/30 rounded-xl"><Info className="w-4 h-4 text-routex-primary" /></button>
+                       </div>
+                    </GlassPanel>
+                  ))}
+               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
     </div>
   );
+}
+
+function InputGroup({ label, placeholder, type = "text" }: any) {
+  return (
+    <div className="space-y-2">
+      <label className="text-[10px] text-white/40 uppercase font-black tracking-widest ml-1">{label}</label>
+      <input 
+        type={type} 
+        placeholder={placeholder}
+        className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-routex-teal/30 transition-all text-xs font-bold uppercase tracking-widest placeholder-white/10"
+      />
+    </div>
+  );
+}
+
+function Navigation(props: any) {
+  return (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+  )
 }

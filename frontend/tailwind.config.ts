@@ -9,67 +9,52 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#08080F",
-        textMain: "#F0F0FF",
-        primary: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
-          950: "#172554",
-        },
+        background: "#07071A",
         routex: {
-          bg: '#08080F',
-          primary: '#5B4EFF', // Electric Indigo
-          cyan: '#00FFD1',    // Neon Cyan
-          danger: '#FF4E4E',  // Danger Red
-          success: '#00E87A', // Vivid Green
-          amber: '#FFB547',   // Parent Amber
-          textMuted: '#7B7B9A',
-          surface: 'rgba(255, 255, 255, 0.05)',
-          surfaceHover: 'rgba(255, 255, 255, 0.1)',
+          dark: "#07071A",
+          primary: "#4F46E5", // indigo
+          teal: "#06EFC5",    // electric teal
+          danger: "#EF4444",  // red
+          success: "#10B981", // emerald
+          amber: "#F59E0B",   // amber
+          textMuted: "#94A3B8",
+          glass: "rgba(255, 255, 255, 0.06)",
+          glassBorder: "rgba(255, 255, 255, 0.12)",
         }
       },
       fontFamily: {
-        display: ['var(--font-bebas)', 'Bebas Neue', 'sans-serif'],
-        body: ['var(--font-dm-sans)', 'DM Sans', 'sans-serif'],
-        mono: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'monospace'],
+        display: ['var(--font-syne)', 'Syne', 'sans-serif'],
+        body: ['var(--font-jakarta)', 'Plus Jakarta Sans', 'sans-serif'],
+        mono: ['var(--font-ibm-mono)', 'IBM Plex Mono', 'monospace'],
+      },
+      backgroundImage: {
+        'gradient-mesh': 'radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)',
       },
       keyframes: {
-        kenBurns: {
-          '0%': { transform: 'scale(1)' },
-          '100%': { transform: 'scale(1.1)' }
+        mesh: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
         },
-        pulseGlow: {
-          '0%, 100%': { opacity: '1', boxShadow: '0 0 15px rgba(91, 78, 255, 0.5)' },
-          '50%': { opacity: '.7', boxShadow: '0 0 25px rgba(91, 78, 255, 0.8)' },
+        sweep: {
+          '0%': { top: '0%', opacity: '0.4' },
+          '50%': { opacity: '1' },
+          '100%': { top: '100%', opacity: '0.4' }
         },
-        pulseRed: {
-          '0%, 100%': { opacity: '1', boxShadow: 'inset 0 0 50px rgba(255, 78, 78, 0.5)' },
-          '50%': { opacity: '.8', boxShadow: 'inset 0 0 100px rgba(255, 78, 78, 0.8)' },
+        strobe: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
         },
-        draw: {
-          '0%': { width: '0%', opacity: '0' },
-          '100%': { width: '100%', opacity: '1' }
-        },
-        shimmer: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' }
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         }
       },
       animation: {
-        'ken-burns': 'kenBurns 20s ease-out infinite alternate',
-        'pulse-glow': 'pulseGlow 2s infinite',
-        'pulse-red': 'pulseRed 2s infinite',
-        'draw-underline': 'draw 1.5s ease-out forwards',
-        'shimmer': 'shimmer 2s infinite',
-      },
+        'mesh': 'mesh 15s ease infinite',
+        'sweep': 'sweep 3s infinite linear',
+        'strobe': 'strobe 2s infinite ease-in-out',
+        'float': 'float 6s ease-in-out infinite',
+      }
     },
   },
   plugins: [],

@@ -5,95 +5,108 @@ import AuthFlow from '../components/ROUTEX/AuthFlow';
 import StudentFlow from '../components/ROUTEX/StudentFlow';
 import DriverFlow from '../components/ROUTEX/DriverFlow';
 import AdminFlow from '../components/ROUTEX/AdminFlow';
-import { useAuthStore } from '../store/authStore';
 
 export default function RoutexApp() {
-  const { user, login, logout, isAuthenticated } = useAuthStore();
+  const [authState, setAuthState] = useState<{
+    isAuthenticated: boolean;
+    role: 'student' | 'driver' | 'admin' | null;
+    user: any;
+  }>({
+    isAuthenticated: false,
+    role: null,
+    user: null,
+  });
+
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Rehydrate from localStorage on mount
-    const savedUser = localStorage.getItem('user');
-    const savedToken = localStorage.getItem('token');
-    if (savedUser && savedToken) {
-      try {
-        login(JSON.parse(savedUser), savedToken);
-      } catch (e) {
-        console.error('Failed to rehydrate auth', e);
-      }
+    // Check localStorage for session rehydration
+    const savedUser = localStorage.getItem('routex_user');
+    const savedRole = localStorage.getItem('routex_role');
+    if (savedUser && savedRole) {
+      setAuthState({
+        isAuthenticated: true,
+        role: savedRole as any,
+        user: JSON.parse(savedUser)
+      });
     }
     setMounted(true);
   }, []);
 
-  const handleLogin = (role: 'student'|'driver'|'admin') => {
-    // For demo, we mock the user object based on role
-    const mockUser = {
-      name: role === 'student' ? 'Priya Sharma' : role === 'driver' ? 'John Driver' : 'Campus Admin',
-      role: role,
-      email: role + '@college.edu'
-    };
-    login(mockUser, 'mock-jwt-token');
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    localStorage.setItem('token', 'mock-jwt-token');
+  const handleLogin = (role: 'student' | 'driver' | 'admin', user: any) => {
+    setAuthState({
+      isAuthenticated: true,
+      role,
+      user
+    });
+    localStorage.setItem('routex_user', JSON.stringify(user));
+    localStorage.setItem('routex_role', role);
   };
 
   const handleLogout = () => {
-    logout();
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    setAuthState({
+      isAuthenticated: false,
+      role: null,
+      user: null
+    });
+    localStorage.removeItem('routex_user');
+    localStorage.removeItem('routex_role');
   };
 
-  if (!mounted) return null; // Avoid hydration mismatch
+  if (!mounted) return null;
 
   return (
-    <div className="relative w-full h-[100dvh] overflow-hidden bg-routex-bg text-white font-body selection:bg-routex-primary selection:text-white">
+    <main className="w-full h-screen bg-routex-dark selection:bg-routex-teal selection:text-routex-dark">
       <AnimatePresence mode="wait">
-        {!isAuthenticated && (
+        {!authState.isAuthenticated && (
           <motion.div
             key="auth"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-            transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+            exit={{ 
+              opacity: 0, 
+              filter: 'blur(10px)',
+              transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
+            }}
             className="w-full h-full"
           >
             <AuthFlow onLogin={handleLogin} />
           </motion.div>
         )}
 
-        {isAuthenticated && user?.role === 'student' && (
+        {authState.isAuthenticated && authState.role === 'student' && (
           <motion.div
             key="student"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.6, ease: "circOut" }}
+            initial={{ opacity: 0, y: 50, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full"
           >
             <StudentFlow onLogout={handleLogout} />
           </motion.div>
         )}
 
-        {isAuthenticated && user?.role === 'driver' && (
+        {authState.isAuthenticated && authState.role === 'driver' && (
           <motion.div
             key="driver"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.6, ease: "circOut" }}
+            initial={{ opacity: 0, x: 100, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full"
           >
             <DriverFlow onLogout={handleLogout} />
           </motion.div>
         )}
 
-        {isAuthenticated && user?.role === 'admin' && (
+        {authState.isAuthenticated && authState.role === 'admin' && (
           <motion.div
             key="admin"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            transition={{ duration: 0.8, ease: "circOut" }}
+            initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full"
           >
             <AdminFlow onLogout={handleLogout} />
@@ -101,8 +114,8 @@ export default function RoutexApp() {
         )}
       </AnimatePresence>
 
-      {/* Global Cinematic Filter */}
-      <div className="fixed inset-0 pointer-events-none z-[9999] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+      {/* Cinematic Vignette */}
+      <div className="fixed inset-0 pointer-events-none z-[100] shadow-[inset_0_0_150px_rgba(0,0,0,0.6)]" />
     </div>
   );
 }

@@ -1,26 +1,26 @@
 import type { Metadata } from 'next';
-import { Bebas_Neue, DM_Sans, JetBrains_Mono } from 'next/font/google';
+import { Syne, Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
-const bebas = Bebas_Neue({
-  weight: '400',
+const syne = Syne({
   subsets: ['latin'],
-  variable: '--font-bebas',
+  variable: '--font-syne',
 });
 
-const dmSans = DM_Sans({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-dm-sans',
+  variable: '--font-jakarta',
 });
 
-const jetbrains = JetBrains_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400', '700'],
   subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
+  variable: '--font-ibm-mono',
 });
 
 export const metadata: Metadata = {
-  title: 'ROUTEX | Cinematic Transit System',
+  title: 'ROUTEX | Cinematic Transit Experience',
   description: 'Next-Generation Real-Time College Transit',
   manifest: '/manifest.json',
   appleWebApp: {
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     title: 'ROUTEX',
   },
-  themeColor: '#0A0A0F',
 };
 
 export default function RootLayout({
@@ -38,19 +37,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bebas.variable} ${dmSans.variable} ${jetbrains.variable} font-body min-h-screen bg-routex-bg text-white antialiased`}>
+      <body className={`${syne.variable} ${jakarta.variable} ${ibmPlexMono.variable} font-body bg-routex-dark text-white antialiased`}>
+        <div className="noise-overlay" />
         {children}
         <Toaster position="top-right" toastOptions={{
           style: {
-            background: '#1A1A24',
+            background: 'rgba(23, 23, 37, 0.8)',
             color: '#FFFFFF',
+            backdropFilter: 'blur(12px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            fontSize: '13px',
-            fontWeight: '500',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
+            borderRadius: '16px',
+            fontSize: '14px',
           },
-          duration: 4000,
         }} />
       </body>
     </html>
