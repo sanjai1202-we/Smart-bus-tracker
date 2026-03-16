@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, Key, Bell, LogOut, Bus, Map as MapIcon, ShieldAlert, CheckCircle2, Copy, Send, Settings, Eye, Info } from 'lucide-react';
 import { GlassPanel, PrimaryButton, MeshBackground } from './Primitives';
+import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
+
+const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
 
 export default function AdminFlow({ onLogout }: any) {
   const [screen, setScreen] = useState<'dashboard' | 'generate' | 'notifications'>('dashboard');
@@ -79,10 +82,10 @@ export default function AdminFlow({ onLogout }: any) {
                {/* Stat Cards */}
                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                   {[
-                    { label: 'Total Fleet', value: '12', color: 'text-routex-primary', icon: Bus },
-                    { label: 'Live Signals', value: '07', color: 'text-routex-teal', icon: Navigation, pulse: true },
-                    { label: 'Manifest Count', value: '284', color: 'text-routex-primary', icon: CheckCircle2 },
-                    { label: 'Active Alerts', value: '03', color: 'text-routex-danger', icon: ShieldAlert }
+                    { label: 'Total Fleet', value: '0', color: 'text-routex-primary', icon: Bus },
+                    { label: 'Live Signals', value: '0', color: 'text-routex-teal', icon: Navigation, pulse: true },
+                    { label: 'Manifest Count', value: '0', color: 'text-routex-primary', icon: CheckCircle2 },
+                    { label: 'Active Alerts', value: '0', color: 'text-routex-danger', icon: ShieldAlert }
                   ].map((stat, i) => (
                     <GlassPanel key={i} className="group relative overflow-hidden border-white/5">
                        <div className="absolute top-0 left-0 w-1 h-full bg-routex-primary/30" />
@@ -97,16 +100,8 @@ export default function AdminFlow({ onLogout }: any) {
                </div>
 
                {/* Fleet Map */}
-               <GlassPanel className="h-[500px] p-0 overflow-hidden relative grayscale contrast-125 brightness-50">
-                  <div className="w-full h-full bg-slate-900/50 flex flex-col items-center justify-center">
-                     <div className="relative">
-                        <span className="text-white/10 font-display text-[15vw] select-none">FLEET MAP</span>
-                        {/* Simulated Bus Dots */}
-                        <motion.div animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 2, repeat: Infinity }} className="absolute top-[20%] left-[30%] w-4 h-4 bg-routex-teal rounded-full shadow-[0_0_20px_rgba(6,239,197,1)]" />
-                        <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 3, repeat: Infinity }} className="absolute top-[60%] right-[40%] w-4 h-4 bg-routex-teal rounded-full shadow-[0_0_20px_rgba(6,239,197,1)]" />
-                        <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2.5, repeat: Infinity }} className="absolute bottom-[20%] left-[50%] w-4 h-4 bg-routex-primary rounded-full shadow-[0_0_20px_rgba(79,70,229,1)]" />
-                     </div>
-                  </div>
+               <GlassPanel className="h-[500px] p-0 overflow-hidden relative">
+                  <MapComponent isGlobal={true} />
                   <div className="absolute top-6 left-6 z-10 flex gap-2">
                      {['LIVE ONLY', 'ALL BUSES', 'HISTORY'].map(filter => (
                         <button key={filter} className="px-4 py-2 bg-black/60 border border-white/10 rounded-xl text-[9px] font-black tracking-widest hover:border-routex-primary transition-all uppercase">{filter}</button>
@@ -135,29 +130,10 @@ export default function AdminFlow({ onLogout }: any) {
                            </tr>
                         </thead>
                         <tbody>
-                           {[
-                             { id: 'BUS007', route: 'ANNA NAGAR → SVC', driver: 'RAJAN KUMAR', status: 'LIVE', color: 'text-routex-teal' },
-                             { id: 'BUS002', route: 'KOYAMBEDU → SVC', driver: 'AMIT SINGH', status: 'DELAYED', color: 'text-routex-amber' },
-                             { id: 'BUS009', route: 'VADAPALANI → SVC', driver: 'KARAN MEHRA', status: 'LIVE', color: 'text-routex-teal' },
-                             { id: 'BUS012', route: 'KK NAGAR → SVC', driver: 'NEHA SHARMA', status: 'INACTIVE', color: 'text-white/20' }
-                           ].map((bus, i) => (
-                             <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-all group">
-                                <td className="py-6 font-mono text-xs font-bold tracking-widest">{bus.id}</td>
-                                <td className="py-6 text-[10px] font-black uppercase tracking-widest opacity-70">{bus.route}</td>
-                                <td className="py-6 text-[10px] font-black uppercase tracking-widest opacity-70">{bus.driver}</td>
-                                <td className="py-6">
-                                   <div className={`flex items-center gap-2 text-[9px] font-black uppercase tracking-widest ${bus.color}`}>
-                                      <span className={`w-1.5 h-1.5 rounded-full bg-current ${bus.status !== 'INACTIVE' ? 'animate-pulse' : ''}`} />
-                                      {bus.status}
-                                   </div>
-                                </td>
-                                <td className="py-6 text-right">
-                                   <button className="p-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/10 rounded-lg">
-                                      <Eye className="w-4 h-4 text-white/50" />
-                                   </button>
-                                </td>
-                             </tr>
-                           ))}
+                           {/* Real-time bus list will populate here when live data is received */}
+                           <tr className="border-b border-white/5 opacity-30">
+                              <td colSpan={5} className="py-20 text-center text-[10px] uppercase tracking-[0.5em]">Waiting for live signals...</td>
+                           </tr>
                         </tbody>
                      </table>
                   </div>
@@ -235,25 +211,10 @@ export default function AdminFlow({ onLogout }: any) {
                   ))}
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {[
-                    { type: 'SOS', user: 'Priya Sharma', bus: 'BUS007', stop: 'Anna Nagar Loop', time: '14:31 PM', urgent: true },
-                    { type: 'MISSED', user: 'Arjun Mehra', bus: 'BUS007', stop: 'Koyambedu Hub', time: '14:35 PM', urgent: false },
-                    { type: 'STATUS', user: 'Rajan Kumar', bus: 'BUS007', info: 'Route Half Completed', time: '14:40 PM', urgent: false }
-                  ].map((alert, i) => (
-                    <GlassPanel key={i} className={`p-8 border-l-4 ${alert.type === 'SOS' ? 'border-routex-danger' : alert.type === 'MISSED' ? 'border-routex-amber' : 'border-routex-teal'}`}>
-                       <div className="flex justify-between items-start mb-6">
-                          <span className={`px-2 py-1 rounded text-[8px] font-black tracking-widest ${alert.type === 'SOS' ? 'bg-routex-danger/20 text-routex-danger' : alert.type === 'MISSED' ? 'bg-routex-amber/20 text-routex-amber' : 'bg-routex-teal/20 text-routex-teal'}`}>{alert.type} ALERT</span>
-                          <span className="text-[10px] font-mono text-white/30">{alert.time}</span>
-                       </div>
-                       <h4 className="text-xl font-display tracking-widest mb-1 uppercase">{alert.user}</h4>
-                       <p className="text-[9px] text-routex-textMuted uppercase tracking-widest mb-6">{alert.bus} / {alert.stop || alert.info}</p>
-                       <div className="flex gap-3">
-                          <button onClick={() => toast.success("Marked as Resolved")} className="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">RESOLVE</button>
-                          <button className="p-3 bg-routex-primary/20 border border-routex-primary/30 rounded-xl"><Info className="w-4 h-4 text-routex-primary" /></button>
-                       </div>
-                    </GlassPanel>
-                  ))}
+               <div className="grid grid-cols-1 gap-6">
+                   <div className="w-full h-64 border-2 border-dashed border-white/5 rounded-[32px] flex items-center justify-center">
+                      <p className="text-[10px] uppercase tracking-[0.4em] opacity-30 text-white">Security Channel Quiet</p>
+                   </div>
                </div>
             </motion.div>
           )}

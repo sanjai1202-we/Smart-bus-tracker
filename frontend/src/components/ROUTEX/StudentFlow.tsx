@@ -6,6 +6,8 @@ import { GlassPanel, PrimaryButton, MeshBackground } from './Primitives';
 import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
 
+const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
+
 const Map = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import('react-leaflet').then(m => m.TileLayer), { ssr: false });
 const Marker = dynamic(() => import('react-leaflet').then(m => m.Marker), { ssr: false });
@@ -135,12 +137,7 @@ export default function StudentFlow({ onLogout }: any) {
             className="w-full h-screen relative flex flex-col"
           >
             {/* Map Layer */}
-            <div className="absolute inset-0 grayscale contrast-125 brightness-50">
-               <div className="w-full h-full bg-slate-900 flex items-center justify-center">
-                  <span className="text-white/10 font-display text-[20vw] select-none">ROUTEX</span>
-                  <div className="absolute w-[300px] h-[300px] bg-routex-teal/5 blur-[100px] animate-mesh" />
-               </div>
-            </div>
+            <MapComponent />
 
             {/* Navigation Overlay */}
             <div className="absolute top-6 left-6 z-20">
@@ -183,7 +180,7 @@ export default function StudentFlow({ onLogout }: any) {
                  <div className="p-8">
                     <div className="flex justify-between items-end mb-10">
                        <div className="space-y-1">
-                          <p className="text-[10px] text-routex-textMuted uppercase tracking-widest">Next Stop Arrival</p>
+                          <p className="text-[10px] text-routex-textMuted uppercase tracking-widest">Tracking Status</p>
                           <div className="flex gap-2 items-end">
                             <span className="text-5xl font-mono tracking-tighter text-white">08:42</span>
                             <span className="text-xs font-mono text-routex-teal pb-1">AM</span>
@@ -238,10 +235,12 @@ export default function StudentFlow({ onLogout }: any) {
 
                     <div className="pt-4 border-t border-white/5 flex justify-between items-center">
                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-slate-800 border border-white/10" />
+                          <div className="w-10 h-10 rounded-full bg-routex-teal/20 border border-routex-teal/30 flex items-center justify-center">
+                             <Navigation2 className="w-5 h-5 text-routex-teal" />
+                          </div>
                           <div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest">Rajan Kumar</p>
-                            <p className="text-[8px] lowercase text-white/40 tracking-widest">driver_session_active</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest">Assigned Driver</p>
+                            <p className="text-[8px] lowercase text-white/40 tracking-widest">session_streaming</p>
                           </div>
                        </div>
                        <div className="flex gap-2">

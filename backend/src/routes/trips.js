@@ -118,4 +118,45 @@ router.get('/active', verifyToken, async (req, res) => {
   }
 });
 
+// Board Bus (Student)
+router.post('/board', verifyToken, async (req, res) => {
+  try {
+    const { bus_id } = req.body;
+    
+    // Get user details (including parent phone)
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('name, parent_phone')
+      .eq('id', req.user.id)
+      .single();
+
+    if (userError || !user) throw new Error('User not found');
+    
+    // Get bus details
+    const { data: bus, error: busError } = await supabase
+      .from('buses')
+      .select('bus_number')
+      .eq('id', bus_id)
+      .single();
+
+    if (busError || !bus) throw new Error('Bus not found');
+
+    // Send SMS to parent if phone exists
+    if (user.parent_phone) {
+      const { sendSMS } = require('../config/twilio');
+      const message = `ROUTEX: Your ward ${user.name} has safely boarded Bus ${bus.bus_number}. Tracking is live.`;
+      try {
+        await sendSMS(user.parent_phone, message);
+      } catch (smsError) {
+        console.error('[SMS] Failed to send boarding alert:', smsError);
+        // We don't fail the request if SMS fails, just log it
+      }
+    }
+
+    res.json({ success: true, message: 'Boarding confirmed' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

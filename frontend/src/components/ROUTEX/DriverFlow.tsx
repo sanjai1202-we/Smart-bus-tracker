@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, QrCode, Power, Map as MapIcon, Bell, CheckCircle2, MessageSquare, ShieldAlert, LogOut, Navigation } from 'lucide-react';
 import { GlassPanel, PrimaryButton, MeshBackground } from './Primitives';
+import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
+
+const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
 
 export default function DriverFlow({ onLogout }: any) {
   const [screen, setScreen] = useState<'activate' | 'dashboard' | 'qr'>('activate');
@@ -80,21 +83,8 @@ export default function DriverFlow({ onLogout }: any) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1">
               {/* Main Console */}
               <div className="lg:col-span-2 space-y-6">
-                <GlassPanel className="h-[400px] p-0 overflow-hidden relative grayscale contrast-125 brightness-50">
-                   <div className="w-full h-full bg-slate-900 flex items-center justify-center">
-                      <span className="text-white/5 font-display text-[10vw]">MAP VIEW</span>
-                      <div className="absolute w-4 h-4 rounded-full bg-routex-amber shadow-[0_0_20px_rgba(245,158,11,1)]" />
-                   </div>
-                   <div className="absolute top-4 left-4 z-10 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-xl text-[10px] font-bold tracking-widest">
-                     LOCATION: ANNA NAGAR LOOP
-                   </div>
-                   {/* Traffic Alert Overlay */}
-                   <div className="absolute bottom-4 left-4 right-4 z-10">
-                      <div className="p-4 bg-amber-500/20 border border-amber-500/40 backdrop-blur-md rounded-2xl flex items-center gap-4">
-                         <ShieldAlert className="w-5 h-5 text-routex-amber" />
-                         <p className="text-[9px] uppercase font-black tracking-widest text-routex-amber">Traffic detected on NH-48. Suggesting alternate vector.</p>
-                      </div>
-                   </div>
+                <GlassPanel className="h-[400px] p-0 overflow-hidden relative">
+                   <MapComponent />
                 </GlassPanel>
 
                 <div className="grid grid-cols-2 gap-6">
@@ -128,50 +118,8 @@ export default function DriverFlow({ onLogout }: any) {
                       <span className="px-2 py-1 bg-routex-danger/20 border border-routex-danger/40 rounded-lg text-[10px] font-black text-routex-danger">3 ALERTS</span>
                    </div>
 
-                   <div className="space-y-4 overflow-y-auto pr-2 scrollbar-hide flex-1">
-                      {/* Alert Card 1 - SOS */}
-                      <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="p-6 bg-routex-danger/10 border-l-4 border-routex-danger rounded-xl">
-                         <div className="flex justify-between items-start mb-4">
-                            <div>
-                               <h5 className="text-[10px] font-black tracking-widest mb-1 uppercase text-routex-danger">EMERGENCY SOS</h5>
-                               <p className="text-xs font-bold uppercase tracking-widest">PRIYA SHARMA</p>
-                            </div>
-                            <span className="text-[10px] text-white/40 font-mono">2:31 PM</span>
-                         </div>
-                         <p className="text-[9px] text-white/60 uppercase mb-4 tracking-widest">Location: Anna Nagar Stop</p>
-                         <button onClick={() => toast.success("SOS Acknowledged")} className="w-full py-2 bg-routex-danger/20 border border-routex-danger/30 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-routex-danger/30 transition-all">Acknowledge</button>
-                      </motion.div>
-
-                      {/* Alert Card 2 - Missed Bus */}
-                      <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="p-6 bg-routex-amber/10 border-l-4 border-routex-amber rounded-xl">
-                         <div className="flex justify-between items-start mb-4">
-                            <div>
-                               <h5 className="text-[10px] font-black tracking-widest mb-1 uppercase text-routex-amber">MISSED BUS</h5>
-                               <p className="text-xs font-bold uppercase tracking-widest">ARJUN MEHRA</p>
-                            </div>
-                            <span className="text-[10px] text-white/40 font-mono">2:35 PM</span>
-                         </div>
-                         <div className="flex gap-2">
-                           <input type="text" placeholder="REPLY STATUS..." className="flex-1 bg-white/5 border border-white/10 p-2 rounded-lg outline-none text-[10px] uppercase font-bold tracking-widest" />
-                           <button onClick={() => toast.success("Message Transmitted")} className="p-2 bg-routex-amber/20 border border-routex-amber/30 rounded-lg"><MessageSquare className="w-4 h-4 text-routex-amber" /></button>
-                         </div>
-                      </motion.div>
-
-                      {/* Alert Card 3 */}
-                      <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="p-6 bg-white/5 border border-white/10 rounded-xl">
-                         <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                               <div className="w-8 h-8 rounded-full bg-routex-teal/20 flex items-center justify-center border border-routex-teal/30">
-                                  <CheckCircle2 className="w-4 h-4 text-routex-teal" />
-                               </div>
-                               <div>
-                                  <p className="text-[10px] font-bold uppercase tracking-widest">KAVYA SINGH</p>
-                                  <p className="text-[8px] text-white/40 uppercase tracking-widest">Boarded At Koyambedu</p>
-                               </div>
-                            </div>
-                            <span className="text-[9px] text-white/40 font-mono">2:40 PM</span>
-                         </div>
-                      </motion.div>
+                   <div className="space-y-4 overflow-y-auto pr-2 scrollbar-hide flex-1 flex items-center justify-center opacity-30">
+                       <p className="text-[10px] uppercase tracking-[0.4em] text-center">Protocol Stream Clear</p>
                    </div>
                 </GlassPanel>
               </div>
