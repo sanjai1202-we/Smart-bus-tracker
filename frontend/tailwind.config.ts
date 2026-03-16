@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,17 +10,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#07071A",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         routex: {
           dark: "#07071A",
-          primary: "#4F46E5", // indigo
-          teal: "#06EFC5",    // electric teal
-          danger: "#EF4444",  // red
-          success: "#10B981", // emerald
-          amber: "#F59E0B",   // amber
-          textMuted: "#94A3B8",
-          glass: "rgba(255, 255, 255, 0.06)",
-          glassBorder: "rgba(255, 255, 255, 0.12)",
+          primary: "#4F46E5",
+          teal: "#06EFC5",
+          danger: "#EF4444",
+          success: "#10B981",
+          amber: "#F59E0B",
+          textMuted: "var(--text-muted)",
+          glass: "var(--glass-bg)",
+          glassBorder: "var(--glass-border)",
         }
       },
       fontFamily: {

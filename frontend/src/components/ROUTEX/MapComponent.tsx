@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { io } from 'socket.io-client';
+import { useTheme } from 'next-themes';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -11,8 +11,8 @@ const createBusIcon = (color: string) => {
     className: 'custom-bus-icon',
     html: `
       <div class="relative w-8 h-8 flex items-center justify-center">
-        <div class="absolute inset-0 bg-[${color}] rounded-full animate-pulse opacity-75 blur-[2px] shadow-[0_0_15px_${color}]"></div>
-        <div class="relative w-6 h-6 bg-[#08080F] border-[3px] border-[${color}] rounded-full flex items-center justify-center"></div>
+        <div class="absolute inset-0 bg-[#06EFC5] rounded-full animate-pulse opacity-75 blur-[2px] shadow-[0_0_15px_#06EFC5]"></div>
+        <div class="relative w-6 h-6 bg-white dark:bg-[#08080F] border-[3px] border-[#06EFC5] rounded-full flex items-center justify-center"></div>
       </div>
     `,
     iconSize: [32, 32],
@@ -20,17 +20,22 @@ const createBusIcon = (color: string) => {
   });
 };
 
-const DEFAULT_CENTER: [number, number] = [12.9716, 77.5946]; // Bangalore or any default
+const DEFAULT_CENTER: [number, number] = [12.9716, 77.5946];
 
 export default function MapComponent({ isGlobal = false, driverCoords = null }: { isGlobal?: boolean, driverCoords?: {lat: number, lng: number} | null }) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [liveBuses, setLiveBuses] = useState<Record<string, any>>({});
   const socketRef = useRef<any>(null);
+  
   const busIconGreen = React.useMemo(() => createBusIcon('#00E87A'), []);
   const busIconCyan = React.useMemo(() => createBusIcon('#00FFD1'), []);
 
   useEffect(() => {
+    setMounted(true);
     const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
     socketRef.current = io(socketUrl);
+    // ... rest of socket logic (same as before)
 
     socketRef.current.on('connect', () => {
       console.log('[Socket] Connected to map stream');
@@ -76,16 +81,22 @@ export default function MapComponent({ isGlobal = false, driverCoords = null }: 
     ? [driverCoords.lat, driverCoords.lng] 
     : (Object.values(liveBuses)[0] ? [Object.values(liveBuses)[0].lat, Object.values(liveBuses)[0].lng] : DEFAULT_CENTER);
 
+  if (!mounted) return <div className="absolute inset-0 bg-background animate-pulse" />;
+
+  const tileUrl = theme === 'dark' 
+    ? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
+
   return (
-    <div className="absolute inset-0 z-0 bg-[#08080F]">
+    <div className="absolute inset-0 z-0 bg-background overflow-hidden rounded-[24px]">
        <MapContainer 
          center={activePosition} 
          zoom={13} 
-         style={{ height: '100%', width: '100%', background: '#08080F' }} 
+         style={{ height: '100%', width: '100%' }} 
          zoomControl={false} 
          attributionControl={false}
        >
-         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png" />
+         <TileLayer url={tileUrl} />
          
          {/* Show all live buses if global, or just the current driver if provided */}
          {isGlobal ? (
