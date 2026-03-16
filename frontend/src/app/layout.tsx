@@ -1,23 +1,11 @@
 import type { Metadata } from 'next';
-import { Syne, Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
-const syne = Syne({
-  subsets: ['latin'],
-  variable: '--font-syne',
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-jakarta',
-});
-
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  variable: '--font-ibm-mono',
-});
+// Reverting to standard font variables to avoid ESM URL scheme issues on S: drive
+const syne = { variable: '' };
+const jakarta = { variable: '' };
+const ibmPlexMono = { variable: '' };
 
 export const metadata: Metadata = {
   title: 'ROUTEX | Cinematic Transit Experience',
@@ -37,7 +25,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${syne.variable} ${jakarta.variable} ${ibmPlexMono.variable} font-body bg-routex-dark text-white antialiased`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className="font-body bg-routex-dark text-white antialiased">
         <div className="noise-overlay" />
         {children}
         <Toaster position="top-right" toastOptions={{
