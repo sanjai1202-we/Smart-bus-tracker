@@ -66,7 +66,7 @@ export default function AuthFlow({ onLogin }: { onLogin: (role: 'student'|'drive
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 bg-routex-dark">
+    <div className="relative min-h-screen flex items-center justify-center p-6 bg-background">
       <MeshBackground variant={activeTab === 'student' ? 'indigo' : activeTab === 'driver' ? 'amber' : 'red'} />
 
       <motion.div
@@ -83,7 +83,7 @@ export default function AuthFlow({ onLogin }: { onLogin: (role: 'student'|'drive
           >
             <Bus className="w-12 h-12 text-routex-teal" />
           </motion.div>
-          <h1 className="text-6xl font-display tracking-[0.2em] text-white">ROUTEX</h1>
+          <h1 className="text-6xl font-display tracking-[0.2em] text-foreground">ROUTEX</h1>
           <p className="font-display text-[10px] uppercase tracking-[0.6em] text-routex-textMuted mt-4 opacity-70">
             Your Campus. Your Ride. Live.
           </p>
@@ -98,7 +98,7 @@ export default function AuthFlow({ onLogin }: { onLogin: (role: 'student'|'drive
               <button
                 key={role.id}
                 onClick={() => { setActiveTab(role.id as any); setPassword(''); }}
-                className={`flex flex-col items-center gap-2 py-4 rounded-[18px] transition-all relative overflow-hidden ${activeTab === role.id ? 'bg-routex-primary/20 text-white border border-routex-primary/40 shadow-xl' : 'text-routex-textMuted hover:text-white'}`}
+                className={`flex flex-col items-center gap-2 py-4 rounded-[18px] transition-all relative overflow-hidden ${activeTab === role.id ? 'bg-routex-primary/20 text-foreground border border-routex-primary/40 shadow-xl' : 'text-routex-textMuted hover:text-foreground'}`}
               >
                 <role.icon className={`w-5 h-5 ${activeTab === role.id ? 'text-routex-teal' : ''}`} />
                 <span className="text-[10px] font-bold uppercase tracking-widest">{role.label}</span>
@@ -133,7 +133,7 @@ export default function AuthFlow({ onLogin }: { onLogin: (role: 'student'|'drive
 
                 <div className="relative">
                   <FloatingInput label="Security Pin" type={showPass ? "text" : "password"} value={password} onChange={(e: any) => setPassword(e.target.value)} icon={Lock} />
-                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-4 text-slate-500 hover:text-white transition-colors">
+                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-4 text-slate-500 hover:text-foreground transition-colors">
                     {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>

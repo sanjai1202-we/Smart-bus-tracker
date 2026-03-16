@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 export const GlassPanel = ({ children, className = "", hoverEffect = false, onClick }: any) => (
   <motion.div
     onClick={onClick}
-    whileHover={hoverEffect ? { y: -4, backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.2)' } : {}}
+    whileHover={hoverEffect ? { y: -4, backgroundColor: 'var(--glass-bg)', borderColor: 'rgba(79, 70, 229, 0.4)' } : {}}
     className={`glass-panel p-6 ${className}`}
   >
     {children}
@@ -57,7 +57,7 @@ export const FloatingInput = ({ label, type = "text", value, onChange, icon: Ico
           onChange={onChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          className={`w-full bg-white/5 border-2 rounded-2xl py-4 pr-4 pl-12 outline-none transition-all font-medium ${error ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : (focused ? 'border-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.3)]' : 'border-white/5')}`}
+          className={`w-full bg-routex-glass border-2 rounded-2xl py-4 pr-4 pl-12 outline-none transition-all font-medium text-foreground ${error ? 'border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : (focused ? 'border-indigo-500 shadow-[0_0_15px_rgba(79,70,229,0.3)]' : 'border-routex-glassBorder')}`}
         />
       </div>
     </div>
@@ -81,12 +81,12 @@ export const MeshBackground = ({ variant = 'indigo' }: { variant?: 'indigo' | 'a
       <motion.div
         animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 left-1/4 w-64 h-64 border border-white/5 rounded-full"
+        className="absolute top-1/4 left-1/4 w-64 h-64 border border-routex-glassBorder rounded-full opacity-20"
       />
       <motion.div
         animate={{ x: [0, -40, 0], y: [0, 60, 0] }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 border border-white/5 rounded-[40px] rotate-45"
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 border border-routex-glassBorder rounded-[40px] rotate-45 opacity-20"
       />
     </div>
   );

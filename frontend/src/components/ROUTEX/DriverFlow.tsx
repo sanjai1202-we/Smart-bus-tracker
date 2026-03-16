@@ -31,7 +31,7 @@ export default function DriverFlow({ onLogout }: any) {
   };
 
   return (
-    <div className="relative min-h-screen bg-routex-dark text-white overflow-hidden">
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden transition-colors duration-300">
       <AnimatePresence mode="wait">
         {screen === 'activate' && (
           <motion.div key="activate" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 flex items-center justify-center p-6 z-10">
@@ -71,7 +71,7 @@ export default function DriverFlow({ onLogout }: any) {
                     <h2 className="text-2xl font-display tracking-widest">RAJAN KUMAR</h2>
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-routex-amber animate-pulse" />
-                      <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/50">TRANSIT PROTOCOL ACTIVE [BUS007]</span>
+                      <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-foreground/50">TRANSIT PROTOCOL ACTIVE [BUS007]</span>
                     </div>
                   </div>
                </div>

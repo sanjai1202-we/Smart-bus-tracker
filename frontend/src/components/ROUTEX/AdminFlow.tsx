@@ -32,7 +32,7 @@ export default function AdminFlow({ onLogout }: any) {
   ];
 
   return (
-    <div className="relative min-h-screen bg-routex-dark text-white p-6 md:p-10">
+    <div className="relative min-h-screen bg-background text-foreground p-6 md:p-10">
       <MeshBackground variant={screen === 'dashboard' ? 'indigo' : screen === 'generate' ? 'teal' : 'red'} />
       <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none z-50 mix-blend-overlay" />
       
@@ -71,7 +71,7 @@ export default function AdminFlow({ onLogout }: any) {
                 <span className="text-[9px] text-routex-teal uppercase font-black tracking-[.3em] font-mono">STATUS: OPTIMAL ●</span>
               </div>
               <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                 <Settings className="w-6 h-6 text-white/50" />
+                 <Settings className="w-6 h-6 text-foreground/50" />
               </div>
            </div>
         </header>
@@ -91,7 +91,7 @@ export default function AdminFlow({ onLogout }: any) {
                        <div className="absolute top-0 left-0 w-1 h-full bg-routex-primary/30" />
                        <div className="flex justify-between items-start mb-4">
                           <stat.icon className={`w-6 h-6 ${stat.color} ${stat.pulse ? 'animate-pulse' : ''}`} />
-                          <span className="text-[9px] font-black text-white/30 tracking-widest">+12% / 24H</span>
+                          <span className="text-[9px] font-black text-foreground/30 tracking-widest">+12% / 24H</span>
                        </div>
                        <h3 className="text-4xl font-mono font-bold tracking-tighter mb-1">{stat.value}</h3>
                        <p className="text-[10px] text-routex-textMuted uppercase font-black tracking-widest">{stat.label}</p>
@@ -121,7 +121,7 @@ export default function AdminFlow({ onLogout }: any) {
                   <div className="overflow-x-auto overflow-y-hidden">
                      <table className="w-full text-left">
                         <thead className="border-b border-white/10">
-                           <tr className="text-[10px] text-white/40 uppercase font-black tracking-[0.3em]">
+                           <tr className="text-[10px] text-foreground/40 uppercase font-black tracking-[0.3em]">
                               <th className="pb-4 pr-12">BUS ID</th>
                               <th className="pb-4">ROUTE VECTOR</th>
                               <th className="pb-4">COMMANDER</th>
@@ -132,7 +132,7 @@ export default function AdminFlow({ onLogout }: any) {
                         <tbody>
                            {/* Real-time bus list will populate here when live data is received */}
                            <tr className="border-b border-white/5 opacity-30">
-                              <td colSpan={5} className="py-20 text-center text-[10px] uppercase tracking-[0.5em]">Waiting for live signals...</td>
+                              <td colSpan={5} className="py-20 text-center text-[10px] uppercase tracking-[0.5em] text-foreground">Waiting for live signals...</td>
                            </tr>
                         </tbody>
                      </table>
@@ -146,7 +146,7 @@ export default function AdminFlow({ onLogout }: any) {
                <GlassPanel className="w-full max-w-2xl p-12">
                   <header className="mb-12">
                      <h3 className="text-3xl font-display tracking-widest uppercase mb-2">INITIALIZE NEW ROUTE</h3>
-                     <p className="text-[10px] text-white/30 uppercase tracking-[0.2em]">Generate dynamic authentication vector for driver deployment</p>
+                     <p className="text-[10px] text-foreground/30 uppercase tracking-[0.2em]">Generate dynamic authentication vector for driver deployment</p>
                   </header>
 
                   <form onSubmit={generateCode} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -227,7 +227,7 @@ export default function AdminFlow({ onLogout }: any) {
 function InputGroup({ label, placeholder, type = "text" }: any) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] text-white/40 uppercase font-black tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] text-foreground/40 uppercase font-black tracking-widest ml-1">{label}</label>
       <input 
         type={type} 
         placeholder={placeholder}

@@ -58,7 +58,7 @@ export default function StudentFlow({ onLogout }: any) {
   };
 
   return (
-    <div className="relative min-h-screen bg-routex-dark text-white overflow-hidden">
+    <div className="relative min-h-screen bg-background text-foreground overflow-hidden transition-colors duration-300">
       <AnimatePresence mode="wait">
         {screen === 'code' && (
           <motion.div
@@ -116,7 +116,7 @@ export default function StudentFlow({ onLogout }: any) {
 
               <GlassPanel hoverEffect onClick={simulateQR} className="flex flex-col items-center p-12 group cursor-pointer">
                 <div className="w-48 h-48 border-2 border-dashed border-white/20 rounded-3xl mb-8 flex items-center justify-center">
-                   <Upload className="w-16 h-16 text-white/50 group-hover:translate-y-[-10px] transition-transform" />
+                   <Upload className="w-16 h-16 text-foreground/50 group-hover:translate-y-[-10px] transition-transform" />
                 </div>
                 <h3 className="text-2xl font-display tracking-widest mb-2">DIGITAL UPLOAD</h3>
                 <p className="text-[10px] text-routex-textMuted uppercase tracking-widest">Cloud Entry Protocol</p>
@@ -185,7 +185,7 @@ export default function StudentFlow({ onLogout }: any) {
                             <span className="text-5xl font-mono tracking-tighter text-white">08:42</span>
                             <span className="text-xs font-mono text-routex-teal pb-1">AM</span>
                           </div>
-                          <p className="text-xs text-white/40">Approaching Anna Nagar Loop</p>
+                          <p className="text-xs text-foreground/40">Approaching Anna Nagar Loop</p>
                        </div>
                        
                        <div className="text-right space-y-2">
@@ -195,7 +195,7 @@ export default function StudentFlow({ onLogout }: any) {
                           >
                              <Bell className="w-3 h-3" /> SET ALARM
                           </button>
-                          <div className="text-[9px] uppercase tracking-widest text-white/40">3 STOPS REMAINING</div>
+                          <div className="text-[9px] uppercase tracking-widest text-foreground/40">3 STOPS REMAINING</div>
                        </div>
                     </div>
 
@@ -203,7 +203,7 @@ export default function StudentFlow({ onLogout }: any) {
                        <div onClick={() => toast.success("Parents Notified 🟢")} className="p-6 bg-routex-teal/5 border border-routex-teal/10 rounded-3xl group cursor-pointer hover:bg-routex-teal/10 transition-all">
                           <CheckCircle2 className="w-6 h-6 text-routex-teal mb-4" />
                           <h5 className="text-[10px] font-bold uppercase tracking-widest text-white mb-1">I BOARDED</h5>
-                          <p className="text-[8px] text-white/40 uppercase">Broadcast Security Alert</p>
+                          <p className="text-[8px] text-foreground/40 uppercase">Broadcast Security Alert</p>
                        </div>
                        <div onClick={() => { 
                          toast.loading("Sending Request..."); 
@@ -215,7 +215,7 @@ export default function StudentFlow({ onLogout }: any) {
                        }} className="p-6 bg-routex-amber/5 border border-routex-amber/10 rounded-3xl group cursor-pointer hover:bg-routex-amber/10 transition-all">
                           <Clock className="w-6 h-6 text-routex-amber mb-4" />
                           <h5 className="text-[10px] font-bold uppercase tracking-widest text-white mb-1">MISSED BUS</h5>
-                          <p className="text-[8px] text-white/40 uppercase">Request Recall Status</p>
+                          <p className="text-[8px] text-foreground/40 uppercase">Request Recall Status</p>
                        </div>
                     </div>
 
@@ -226,7 +226,7 @@ export default function StudentFlow({ onLogout }: any) {
                               <MessageSquare className="w-5 h-5 text-routex-primary" />
                            </div>
                            <div>
-                              <p className="text-[10px] text-white/50 uppercase tracking-widest mb-1">Driver Rajan</p>
+                              <p className="text-[10px] text-foreground/50 uppercase tracking-widest mb-1">Driver Rajan</p>
                               <p className="text-xs text-white italic">&quot;I&apos;ll wait 2 mins at Koyambedu Stop. Hurry up!&quot;</p>
                            </div>
                         </motion.div>
@@ -240,7 +240,7 @@ export default function StudentFlow({ onLogout }: any) {
                           </div>
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-widest">Assigned Driver</p>
-                            <p className="text-[8px] lowercase text-white/40 tracking-widest">session_streaming</p>
+                            <p className="text-[8px] lowercase text-foreground/40 tracking-widest">session_streaming</p>
                           </div>
                        </div>
                        <div className="flex gap-2">
@@ -284,7 +284,7 @@ export default function StudentFlow({ onLogout }: any) {
       {/* Alarm Modal Overlay */}
       <AnimatePresence>
         {alarmModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-routex-dark/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-background/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6">
              <GlassPanel className="w-full max-w-sm p-8 text-center">
                 <Bell className="w-12 h-12 text-routex-teal mx-auto mb-6" />
                 <h3 className="text-2xl font-display tracking-widest mb-4">STOP ALARM</h3>
@@ -296,7 +296,7 @@ export default function StudentFlow({ onLogout }: any) {
                    <option>College Gate</option>
                 </select>
                 <div className="flex gap-4">
-                   <button onClick={() => setAlarmModal(false)} className="flex-1 py-4 text-[10px] font-bold uppercase tracking-widest text-white/50 hover:text-white">Cancel</button>
+                   <button onClick={() => setAlarmModal(false)} className="flex-1 py-4 text-[10px] font-bold uppercase tracking-widest text-foreground/50 hover:text-white">Cancel</button>
                    <button onClick={setAlarm} className="flex-1 py-4 bg-routex-teal text-routex-dark font-bold text-[10px] uppercase tracking-widest rounded-xl">Activate</button>
                 </div>
              </GlassPanel>
