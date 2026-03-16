@@ -116,6 +116,6 @@ export default function RoutexApp() {
 
       {/* Cinematic Vignette */}
       <div className="fixed inset-0 pointer-events-none z-[100] shadow-[inset_0_0_150px_rgba(0,0,0,0.6)]" />
-    </div>
+    </main>
   );
 }
