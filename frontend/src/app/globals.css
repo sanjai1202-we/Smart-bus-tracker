@@ -9,7 +9,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground font-body overflow-x-hidden;
+    @apply bg-background text-white font-body overflow-x-hidden;
   }
 }
 
