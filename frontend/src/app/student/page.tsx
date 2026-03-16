@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import api from '@/services/api';
 import { useAuthStore } from '@/store/authStore';
 import BusMap from '@/components/Map/BusMap';
-import { LogOut, BusFront, Map as MapIcon, Loader2, Navigation, AlertTriangle, UserCircle } from 'lucide-react';
+import { LogOut, BusFront, Map as MapIcon, Loader2, Navigation, AlertTriangle, UserCircle, CheckCircle2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function StudentDashboard() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function StudentDashboard() {
   const [selectedTrip, setSelectedTrip] = useState<any>(null);
   const [showSidebar, setShowSidebar] = useState(true);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [boarding, setBoarding] = useState(false);
+  const [boardedTrips, setBoardedTrips] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     // PWA Install Prompt handler
@@ -72,6 +75,20 @@ export default function StudentDashboard() {
     setSelectedTrip(trip);
     if (window.innerWidth < 768) {
       setShowSidebar(false);
+    }
+  };
+
+  const handleBoardBus = async (busId: string) => {
+    setBoarding(true);
+    try {
+      await api.post('/trips/board', { bus_id: busId });
+      setBoardedTrips(prev => new Set(prev).add(busId));
+      toast.success('Parents notified successfully!');
+    } catch (err) {
+      toast.error('Failed to notify parents');
+      console.error(err);
+    } finally {
+      setBoarding(false);
     }
   };
 
@@ -198,12 +215,36 @@ export default function StudentDashboard() {
                     </div>
                   </div>
 
-                  <div className={`mt-8 flex items-center justify-between transition-all duration-500 ${selectedTrip?.id === trip.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                     <span className="text-[10px] font-black text-primary-600 uppercase tracking-[0.2em]">Monitoring Active</span>
-                     <div className="flex space-x-1">
-                        <div className="w-1 h-1 rounded-full bg-primary-600 animate-bounce" style={{animationDelay: '0s'}}></div>
-                        <div className="w-1 h-1 rounded-full bg-primary-600 animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-1 h-1 rounded-full bg-primary-600 animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                   <div className={`mt-8 flex items-center justify-between transition-all duration-500 ${selectedTrip?.id === trip.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                     <div className="flex flex-col gap-3 w-full">
+                        <div className="flex items-center justify-between">
+                           <span className="text-[10px] font-black text-primary-600 uppercase tracking-[0.2em]">Monitoring Active</span>
+                           <div className="flex space-x-1">
+                              <div className="w-1 h-1 rounded-full bg-primary-600 animate-bounce" style={{animationDelay: '0s'}}></div>
+                              <div className="w-1 h-1 rounded-full bg-primary-600 animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                              <div className="w-1 h-1 rounded-full bg-primary-600 animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                           </div>
+                        </div>
+                        
+                        {selectedTrip?.id === trip.id && (
+                           <button 
+                             disabled={boarding || boardedTrips.has(trip.buses.id)}
+                             onClick={(e) => { e.stopPropagation(); handleBoardBus(trip.buses.id); }}
+                             className={`w-full py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all overflow-hidden relative flex items-center justify-center gap-2 ${
+                               boardedTrips.has(trip.buses.id) 
+                                 ? 'bg-green-50 text-green-600 border border-green-200' 
+                                 : 'bg-primary-600 text-white hover:bg-primary-500 shadow-lg shadow-primary-200 active:scale-95'
+                             }`}
+                           >
+                             {boarding ? (
+                               <Loader2 className="w-4 h-4 animate-spin" />
+                             ) : boardedTrips.has(trip.buses.id) ? (
+                               <><CheckCircle2 className="w-4 h-4" /> Boarded & Notified</>
+                             ) : (
+                               'Confirm Boarding (Notify Parents)'
+                             )}
+                           </button>
+                        )}
                      </div>
                   </div>
                 </div>

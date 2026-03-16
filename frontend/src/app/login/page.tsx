@@ -44,23 +44,23 @@ export default function Login() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-primary-50 blur-[120px] animate-float" style={{ animationDelay: '2s' }}></div>
 
       <div className="m-auto w-full max-w-md p-10 relative z-10">
-        <div className="glass-card p-8 sm:p-12 border-slate-100 bg-white/80 shadow-2xl animate-in">
+        <div className="glass-card p-8 sm:p-12 border-white/10 bg-black/40 shadow-2xl animate-in backdrop-blur-xl">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center p-4 bg-primary-50 rounded-3xl mb-6 text-primary-600 ring-1 ring-primary-100 shadow-sm">
+            <div className="inline-flex items-center justify-center p-4 bg-primary-500/10 rounded-3xl mb-6 text-primary-400 ring-1 ring-primary-500/20 shadow-sm">
               <Bus className="w-10 h-10" />
             </div>
-            <h1 className="text-3xl font-black tracking-tight text-slate-900 mb-2">Welcome Back</h1>
-            <p className="text-slate-500 text-sm font-medium tracking-wide">Enter your credentials to access the fleet.</p>
+            <h1 className="text-3xl font-black tracking-tight text-white mb-2">Welcome Back</h1>
+            <p className="text-slate-400 text-sm font-medium tracking-wide">Enter your credentials to access the fleet.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Account Identity</label>
+              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Account Identity</label>
               <input
                 type="email"
                 placeholder="name@college.edu"
                 required
-                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-900 placeholder-slate-400 font-medium"
+                className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-white placeholder-slate-600 font-medium"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -68,14 +68,14 @@ export default function Login() {
 
             <div className="space-y-2">
                <div className="flex justify-between ml-1">
-                 <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Pin</label>
-                 <a href="#" className="text-[10px] font-black text-primary-600 hover:text-primary-500 tracking-widest uppercase">Reset</a>
+                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest">Security Pin</label>
+                 <a href="#" className="text-[10px] font-black text-primary-400 hover:text-primary-300 tracking-widest uppercase">Reset</a>
                </div>
               <input
                 type="password"
                 placeholder="••••••••"
                 required
-                className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-slate-900 placeholder-slate-400 font-medium"
+                className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-white placeholder-slate-600 font-medium"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -90,10 +90,10 @@ export default function Login() {
             </button>
           </form>
           
-          <div className="mt-10 pt-8 border-t border-slate-100 text-center">
+          <div className="mt-10 pt-8 border-t border-white/5 text-center">
             <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">
               No account?{' '}
-              <Link href="/register" className="text-primary-600 hover:text-primary-500 transition-colors">
+              <Link href="/register" className="text-primary-400 hover:text-primary-300 transition-colors">
                 Register
               </Link>
             </p>

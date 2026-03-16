@@ -9,54 +9,55 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        background: "#08080F",
+        textMain: "#F0F0FF",
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
         },
-        slate: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
-        },
-        background: "#f8fafc",
-        surface: "#ffffff",
-        textMain: "#0f172a",
-        textMuted: "#64748b"
+        routex: {
+          bg: '#08080F',
+          primary: '#5B4EFF',
+          cyan: '#00FFD1',
+          danger: '#FF4E4E',
+          success: '#00E87A',
+          amber: '#FFB547',
+          textMuted: '#7B7B9A',
+          surface: 'rgba(255, 255, 255, 0.05)',
+          surfaceHover: 'rgba(255, 255, 255, 0.1)',
+        }
+      },
+      fontFamily: {
+        display: ['var(--font-bebas)'],
+        body: ['var(--font-dm-sans)'],
+        mono: ['var(--font-jetbrains-mono)'],
       },
       animation: {
-        'bus-move': 'busMove 3s ease-in-out infinite',
-        'wheel-spin': 'wheelSpin 0.8s linear infinite',
-        'float': 'float 6s ease-in-out infinite',
+        'ken-burns': 'kenBurns 20s ease-out infinite alternate',
+        'pulse-glow': 'pulseGlow 2s infinite',
+        'pulse-red': 'pulseRed 2s infinite',
       },
       keyframes: {
-        busMove: {
-          '0%, 100%': { transform: 'translateX(-5px) translateY(0px)' },
-          '50%': { transform: 'translateX(5px) translateY(-2px)' },
+        kenBurns: {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(1.1)' }
         },
-        wheelSpin: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
+        pulseGlow: {
+          '0%, 100%': { opacity: '1', boxShadow: '0 0 15px rgba(91, 78, 255, 0.5)' },
+          '50%': { opacity: '.7', boxShadow: '0 0 25px rgba(91, 78, 255, 0.8)' },
         },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+        pulseRed: {
+          '0%, 100%': { opacity: '1', boxShadow: 'inset 0 0 50px rgba(255, 78, 78, 0.5)' },
+          '50%': { opacity: '.8', boxShadow: 'inset 0 0 100px rgba(255, 78, 78, 0.8)' },
         }
       }
     },
