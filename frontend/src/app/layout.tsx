@@ -1,26 +1,34 @@
 import type { Metadata } from 'next';
+import { Bebas_Neue, DM_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
+const bebas = Bebas_Neue({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-bebas',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+});
+
 export const metadata: Metadata = {
-  title: 'Smart Bus Tracker | Multi-College platform',
-  description: 'Real-time bus tracking application for colleges',
+  title: 'ROUTEX | Cinematic Transit System',
+  description: 'Next-Generation Real-Time College Transit',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
-    title: 'Bus Tracker',
+    statusBarStyle: 'black-translucent',
+    title: 'ROUTEX',
   },
-  formatDetection: {
-    telephone: false,
-  },
-};
-
-export const viewport = {
-  themeColor: '#0ea5e9',
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
+  themeColor: '#0A0A0F',
 };
 
 export default function RootLayout({
@@ -30,17 +38,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="font-sans min-h-screen bg-background text-textMain antialiased">
+      <body className={`${bebas.variable} ${dmSans.variable} ${jetbrains.variable} font-body min-h-screen bg-routex-bg text-white antialiased`}>
         {children}
         <Toaster position="top-right" toastOptions={{
           style: {
-            background: '#ffffff',
-            color: '#0f172a',
-            border: '1px solid #f1f5f9',
-            borderRadius: '16px',
+            background: '#1A1A24',
+            color: '#FFFFFF',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
             fontSize: '13px',
-            fontWeight: '600',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
+            fontWeight: '500',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
           },
           duration: 4000,
         }} />

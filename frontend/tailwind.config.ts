@@ -26,25 +26,20 @@ const config: Config = {
         },
         routex: {
           bg: '#08080F',
-          primary: '#5B4EFF',
-          cyan: '#00FFD1',
-          danger: '#FF4E4E',
-          success: '#00E87A',
-          amber: '#FFB547',
+          primary: '#5B4EFF', // Electric Indigo
+          cyan: '#00FFD1',    // Neon Cyan
+          danger: '#FF4E4E',  // Danger Red
+          success: '#00E87A', // Vivid Green
+          amber: '#FFB547',   // Parent Amber
           textMuted: '#7B7B9A',
           surface: 'rgba(255, 255, 255, 0.05)',
           surfaceHover: 'rgba(255, 255, 255, 0.1)',
         }
       },
       fontFamily: {
-        display: ['var(--font-bebas)'],
-        body: ['var(--font-dm-sans)'],
-        mono: ['var(--font-jetbrains-mono)'],
-      },
-      animation: {
-        'ken-burns': 'kenBurns 20s ease-out infinite alternate',
-        'pulse-glow': 'pulseGlow 2s infinite',
-        'pulse-red': 'pulseRed 2s infinite',
+        display: ['var(--font-bebas)', 'Bebas Neue', 'sans-serif'],
+        body: ['var(--font-dm-sans)', 'DM Sans', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'monospace'],
       },
       keyframes: {
         kenBurns: {
@@ -58,8 +53,23 @@ const config: Config = {
         pulseRed: {
           '0%, 100%': { opacity: '1', boxShadow: 'inset 0 0 50px rgba(255, 78, 78, 0.5)' },
           '50%': { opacity: '.8', boxShadow: 'inset 0 0 100px rgba(255, 78, 78, 0.8)' },
+        },
+        draw: {
+          '0%': { width: '0%', opacity: '0' },
+          '100%': { width: '100%', opacity: '1' }
+        },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' }
         }
-      }
+      },
+      animation: {
+        'ken-burns': 'kenBurns 20s ease-out infinite alternate',
+        'pulse-glow': 'pulseGlow 2s infinite',
+        'pulse-red': 'pulseRed 2s infinite',
+        'draw-underline': 'draw 1.5s ease-out forwards',
+        'shimmer': 'shimmer 2s infinite',
+      },
     },
   },
   plugins: [],
