@@ -1,329 +1,221 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Camera, Upload, LogOut, Bell, Shield, MessageSquare, CheckCircle2, Navigation2, Clock } from 'lucide-react';
-import { GlassPanel, PrimaryButton, MeshBackground } from './Primitives';
+import { 
+  QrCode, Search, Navigation, MapPin, Clock, 
+  Bell, Shield, ChevronUp, ChevronDown, Camera,
+  Upload, AlertCircle, Phone, LogOut, CheckCircle
+} from 'lucide-react';
+import { GlassPanel, PrimaryButton, MeshBackground, FloatingInput } from './Primitives';
 import dynamic from 'next/dynamic';
 import toast from 'react-hot-toast';
 
 const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
 
-const Map = dynamic(() => import('react-leaflet').then(m => m.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import('react-leaflet').then(m => m.TileLayer), { ssr: false });
-const Marker = dynamic(() => import('react-leaflet').then(m => m.Marker), { ssr: false });
-
-export default function StudentFlow({ onLogout }: any) {
-  const [screen, setScreen] = useState<'code' | 'qr' | 'tracking'>('code');
+export default function StudentFlow({ onLogout }: { onLogout: () => void }) {
+  const [step, setStep] = useState<'entry' | 'qr' | 'tracking'>('entry');
   const [busCode, setBusCode] = useState(['', '', '', '', '', '']);
-  const [alarmModal, setAlarmModal] = useState(false);
-  const [alarmActive, setAlarmActive] = useState(false);
-  const [missedResponse, setMissedResponse] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleCodeChange = (index: number, val: string) => {
-    if (val.length > 1) return;
+  const handleOTP = (index: number, value: string) => {
+    if (value.length > 1) return;
     const newCode = [...busCode];
-    newCode[index] = val.toUpperCase();
+    newCode[index] = value.toUpperCase();
     setBusCode(newCode);
-    if (val && index < 5) {
-      const next = document.getElementById(`code-${index + 1}`);
-      next?.focus();
+
+    if (value && index < 5) {
+      document.getElementById(`otp-${index + 1}`)?.focus();
     }
   };
 
   const verifyCode = () => {
     if (busCode.join('') === 'BUS007') {
-      toast.success("Identity Verified: Route Matched");
-      setScreen('qr');
+      toast.success("Identity Synchronized");
+      setStep('tracking');
     } else {
       toast.error("Invalid Vector Code");
       setBusCode(['', '', '', '', '', '']);
     }
   };
 
-  const simulateQR = () => {
-    toast.dismiss();
-    const t = toast.loading("Analyzing Bio-Metric QR...");
-    setTimeout(() => {
-      toast.dismiss(t);
-      setScreen('tracking');
-    }, 2000);
-  };
-
-  const setAlarm = () => {
-    setAlarmModal(false);
-    toast.success("Proximity Alarm Initialized");
-    setTimeout(() => {
-      setAlarmActive(true);
-    }, 5000);
-  };
-
   return (
-    <div className="relative min-h-screen bg-background text-foreground overflow-hidden transition-colors duration-300">
+    <div className="relative min-h-screen bg-[var(--bg-base)] overflow-hidden font-['Satoshi',sans-serif]">
+      <MeshBackground />
+      
       <AnimatePresence mode="wait">
-        {screen === 'code' && (
-          <motion.div
-            key="code-screen"
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="fixed inset-0 flex items-center justify-center p-6 z-10"
-          >
-            <MeshBackground variant="teal" />
-            <GlassPanel className="w-full max-w-md p-10 text-center">
-              <h2 className="text-4xl font-display tracking-widest mb-4">INITIALIZE BUS</h2>
-              <p className="text-[10px] text-routex-textMuted uppercase tracking-widest mb-10">Enter 6-Digit Transmission Code</p>
+        {step === 'entry' && (
+          <motion.div key="entry" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="min-h-screen flex items-center justify-center p-6 z-10 relative">
+            <GlassPanel className="w-full max-w-md !p-12 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] mx-auto mb-8">
+                <Navigation className="w-8 h-8" />
+              </div>
+              <h2 className="text-3xl font-['Clash_Display',sans-serif] font-bold tracking-tight mb-2">Initialize Bus Link</h2>
+              <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-[0.4em] mb-12 opacity-60">Enter the 6-digit vector code</p>
               
-              <div className="flex justify-between gap-2 mb-10">
+              <div className="flex justify-center gap-3 mb-12">
                 {busCode.map((digit, i) => (
-                  <motion.input
+                  <input
                     key={i}
-                    id={`code-${i}`}
+                    id={`otp-${i}`}
                     type="text"
                     value={digit}
-                    onChange={(e) => handleCodeChange(i, e.target.value)}
-                    whileFocus={{ scale: 1.1, borderColor: '#06EFC5' }}
-                    className="w-12 h-16 bg-white/5 border-2 border-white/10 rounded-xl text-center text-2xl font-mono focus:outline-none transition-all"
+                    onChange={(e) => handleOTP(i, e.target.value)}
+                    className="w-12 h-16 glass-panel !p-0 text-center text-2xl font-mono font-bold border-2 border-[var(--border-glass)] focus:border-[var(--primary)] focus:shadow-[0_0_20px_var(--primary-glow)] outline-none transition-all"
                   />
                 ))}
               </div>
 
-              <PrimaryButton variant="teal" onClick={verifyCode}>
+              <PrimaryButton onClick={verifyCode} disabled={busCode.some(d => !d)}>
                 Establish Connection
               </PrimaryButton>
+              
+              <button onClick={() => setStep('qr')} className="mt-8 text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                Or Scan QR Identity
+              </button>
             </GlassPanel>
           </motion.div>
         )}
 
-        {screen === 'qr' && (
-          <motion.div
-            key="qr-screen"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, filter: 'blur(10px)' }}
-            className="fixed inset-0 flex flex-col items-center justify-center p-6 z-10"
-          >
-            <MeshBackground variant="indigo" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-              <GlassPanel hoverEffect onClick={simulateQR} className="flex flex-col items-center p-12 group cursor-pointer">
-                <div className="relative w-48 h-48 border-2 border-routex-teal/30 rounded-3xl mb-8 flex items-center justify-center overflow-hidden">
-                   <div className="absolute inset-0 border-[3px] border-routex-teal rounded-3xl animate-pulse" />
-                   <div className="absolute top-0 left-0 w-full h-[2px] bg-routex-teal shadow-[0_0_15px_rgba(6,239,197,1)] animate-sweep" />
-                   <Camera className="w-16 h-16 text-routex-teal opacity-50" />
-                </div>
-                <h3 className="text-2xl font-display tracking-widest mb-2">LIVE SCAN</h3>
-                <p className="text-[10px] text-routex-textMuted uppercase tracking-widest">Aura Verification System</p>
-              </GlassPanel>
+        {step === 'qr' && (
+          <motion.div key="qr" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.1 }} className="min-h-screen flex items-center justify-center p-6 z-10 relative">
+             <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
+                <GlassPanel onClick={() => setStep('tracking')} hoverEffect className="group cursor-pointer !p-12 text-center flex flex-col items-center justify-center relative overflow-hidden">
+                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--primary)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                   <div className="w-20 h-20 rounded-3xl bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] mb-8 group-hover:scale-110 transition-transform">
+                      <Camera className="w-10 h-10" />
+                   </div>
+                   <h3 className="text-2xl font-['Clash_Display',sans-serif] font-bold mb-2">Live Scan</h3>
+                   <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Use your device camera</p>
+                   <motion.div animate={{ top: ['0%', '100%', '0%'] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="absolute left-0 right-0 h-[2px] bg-[var(--primary)] opacity-20 pointer-events-none" />
+                </GlassPanel>
 
-              <GlassPanel hoverEffect onClick={simulateQR} className="flex flex-col items-center p-12 group cursor-pointer">
-                <div className="w-48 h-48 border-2 border-dashed border-white/20 rounded-3xl mb-8 flex items-center justify-center">
-                   <Upload className="w-16 h-16 text-foreground/50 group-hover:translate-y-[-10px] transition-transform" />
-                </div>
-                <h3 className="text-2xl font-display tracking-widest mb-2">DIGITAL UPLOAD</h3>
-                <p className="text-[10px] text-routex-textMuted uppercase tracking-widest">Cloud Entry Protocol</p>
-              </GlassPanel>
-            </div>
-            
-            <button onClick={() => setScreen('code')} className="mt-12 flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.3em] text-routex-textMuted hover:text-white transition-all">
-              <ChevronLeft className="w-4 h-4" /> Re-enter Vector Code
-            </button>
+                <GlassPanel onClick={() => setStep('tracking')} hoverEffect className="group cursor-pointer !p-12 text-center flex flex-col items-center justify-center">
+                   <div className="w-20 h-20 rounded-3xl bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] mb-8 group-hover:scale-110 transition-transform">
+                      <Upload className="w-10 h-10" />
+                   </div>
+                   <h3 className="text-2xl font-['Clash_Display',sans-serif] font-bold mb-2">Upload Identity</h3>
+                   <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest">Import from gallery</p>
+                </GlassPanel>
+             </div>
+             
+             <button onClick={() => setStep('entry')} className="absolute bottom-12 text-[10px] font-black uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                Back to code entry
+             </button>
           </motion.div>
         )}
 
-        {screen === 'tracking' && (
-          <motion.div
-            key="tracking-screen"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="w-full h-screen relative flex flex-col"
-          >
-            {/* Map Layer */}
-            <MapComponent />
+        {step === 'tracking' && (
+          <motion.div key="tracking" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-screen relative flex flex-col z-10">
+            <header className="absolute top-6 left-6 right-6 z-50 flex justify-between items-start pointer-events-none">
+              <div className="pointer-events-auto">
+                 <GlassPanel className="!py-3 !px-6 flex items-center gap-4 bg-[var(--bg-elevated)]/80">
+                    <div className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center text-white">R</div>
+                    <div>
+                       <h1 className="text-sm font-bold tracking-tight">ROUTEX LIVE</h1>
+                       <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--live)] animate-pulse" />
+                          <span className="text-[9px] font-black uppercase tracking-tighter text-[var(--live)]">Sync Active</span>
+                       </div>
+                    </div>
+                 </GlassPanel>
+              </div>
 
-            {/* Navigation Overlay */}
-            <div className="absolute top-6 left-6 z-20">
-               <GlassPanel className="py-3 px-6 rounded-full flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-routex-teal/20 flex items-center justify-center">
-                    <Navigation2 className="w-4 h-4 text-routex-teal rotate-45" />
-                  </div>
-                  <div>
-                    <h4 className="text-[10px] font-bold tracking-widest text-routex-teal">BUS BUS007</h4>
-                    <p className="text-[8px] uppercase tracking-widest text-white/60">Heading to College Gate</p>
-                  </div>
-               </GlassPanel>
-            </div>
+              <div className="flex flex-col gap-3 pointer-events-auto">
+                 <button onClick={onLogout} className="p-4 glass-panel !rounded-2xl text-[var(--text-secondary)] hover:text-[var(--alert)] transition-colors">
+                    <LogOut className="w-6 h-6" />
+                 </button>
+                 <button className="p-4 glass-panel !rounded-2xl text-[var(--primary)] shadow-[0_0_20px_var(--primary-glow)]">
+                    <Bell className="w-6 h-6" />
+                 </button>
+              </div>
+            </header>
 
-            <div className="absolute top-6 right-6 z-20">
-               <button onClick={onLogout} className="p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-all">
-                 <LogOut className="w-5 h-5" />
-               </button>
-            </div>
-
-            {/* Live Indicator */}
-            <div className="absolute top-24 left-6 z-20">
-               <div className="flex items-center gap-2 px-3 py-1 bg-black/50 backdrop-blur-md rounded-full border border-white/5 text-[9px] font-bold tracking-widest">
-                 <span className="w-2 h-2 rounded-full bg-routex-teal animate-pulse" />
-                 LIVE POSITIONING
+            <div className="flex-1 relative">
+               <MapComponent />
+               
+               <div className="absolute bottom-40 right-6 z-[100]">
+                  <motion.button 
+                    whileTap={{ scale: 0.9 }}
+                    className="relative w-16 h-16 bg-[var(--alert)] rounded-full flex items-center justify-center text-white shadow-[0_0_30px_rgba(239,68,68,0.4)] z-10"
+                  >
+                     <Shield className="w-8 h-8" />
+                     <span className="absolute inset-0 rounded-full border-4 border-[var(--alert)] animate-ping opacity-75" />
+                     <span className="absolute inset-[-10px] rounded-full border-2 border-[var(--alert)] animate-ping opacity-40 duration-1000" />
+                  </motion.button>
                </div>
             </div>
 
-            {/* Draggable Bottom Panel */}
             <motion.div 
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              drag="y"
-              dragConstraints={{ top: 0, bottom: 200 }}
-              className="absolute bottom-4 left-4 right-4 z-30"
+              animate={{ height: drawerOpen ? '450px' : '150px' }}
+              className="absolute bottom-0 left-0 right-0 glass-panel !rounded-t-[40px] !p-0 z-[200] overflow-hidden shadow-[0_-20px_80px_rgba(0,0,0,0.5)] border-t border-[var(--border-glass)]"
             >
-               <GlassPanel className="p-0 overflow-hidden shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
-                 <div className="w-12 h-1 bg-white/20 rounded-full mx-auto my-4" />
-                 
-                 <div className="p-8">
-                    <div className="flex justify-between items-end mb-10">
-                       <div className="space-y-1">
-                          <p className="text-[10px] text-routex-textMuted uppercase tracking-widest">Tracking Status</p>
-                          <div className="flex gap-2 items-end">
-                            <span className="text-5xl font-mono tracking-tighter text-white">08:42</span>
-                            <span className="text-xs font-mono text-routex-teal pb-1">AM</span>
-                          </div>
-                          <p className="text-xs text-foreground/40">Approaching Anna Nagar Loop</p>
-                       </div>
-                       
-                       <div className="text-right space-y-2">
-                          <button 
-                            onClick={() => setAlarmModal(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-routex-teal/10 border border-routex-teal/20 rounded-xl text-[10px] font-bold text-routex-teal hover:bg-routex-teal/20 transition-all"
-                          >
-                             <Bell className="w-3 h-3" /> SET ALARM
-                          </button>
-                          <div className="text-[9px] uppercase tracking-widest text-foreground/40">3 STOPS REMAINING</div>
-                       </div>
+              <div 
+                onClick={() => setDrawerOpen(!drawerOpen)}
+                className="w-full h-12 flex items-center justify-center cursor-pointer group"
+              >
+                 <div className="w-12 h-1.5 bg-[var(--border-glass)] rounded-full group-hover:bg-[var(--primary)] transition-colors" />
+              </div>
+
+              <div className="px-8 pb-8">
+                 <div className="flex justify-between items-center mb-8">
+                    <div>
+                       <h2 className="text-3xl font-['Clash_Display',sans-serif] font-bold tracking-tight uppercase">BUS007</h2>
+                       <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-[0.4em] font-bold">Anna Nagar → College Hub</p>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4 mb-8">
-                       <div onClick={() => toast.success("Parents Notified 🟢")} className="p-6 bg-routex-teal/5 border border-routex-teal/10 rounded-3xl group cursor-pointer hover:bg-routex-teal/10 transition-all">
-                          <CheckCircle2 className="w-6 h-6 text-routex-teal mb-4" />
-                          <h5 className="text-[10px] font-bold uppercase tracking-widest text-white mb-1">I BOARDED</h5>
-                          <p className="text-[8px] text-foreground/40 uppercase">Broadcast Security Alert</p>
-                       </div>
-                       <div onClick={() => { 
-                         toast.loading("Sending Request..."); 
-                         setTimeout(() => {
-                           toast.dismiss();
-                           setMissedResponse(true);
-                           toast.success("Driver Alerted");
-                         }, 2000); 
-                       }} className="p-6 bg-routex-amber/5 border border-routex-amber/10 rounded-3xl group cursor-pointer hover:bg-routex-amber/10 transition-all">
-                          <Clock className="w-6 h-6 text-routex-amber mb-4" />
-                          <h5 className="text-[10px] font-bold uppercase tracking-widest text-white mb-1">MISSED BUS</h5>
-                          <p className="text-[8px] text-foreground/40 uppercase">Request Recall Status</p>
-                       </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {missedResponse && (
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-8 p-4 bg-white/5 border border-white/10 rounded-2xl flex items-start gap-4">
-                           <div className="w-10 h-10 rounded-full bg-routex-primary/20 flex items-center justify-center shrink-0">
-                              <MessageSquare className="w-5 h-5 text-routex-primary" />
-                           </div>
-                           <div>
-                              <p className="text-[10px] text-foreground/50 uppercase tracking-widest mb-1">Driver Rajan</p>
-                              <p className="text-xs text-white italic">&quot;I&apos;ll wait 2 mins at Koyambedu Stop. Hurry up!&quot;</p>
-                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="pt-4 border-t border-white/5 flex justify-between items-center">
-                       <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-routex-teal/20 border border-routex-teal/30 flex items-center justify-center">
-                             <Navigation2 className="w-5 h-5 text-routex-teal" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest">Assigned Driver</p>
-                            <p className="text-[8px] lowercase text-foreground/40 tracking-widest">session_streaming</p>
-                          </div>
-                       </div>
-                       <div className="flex gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-routex-teal animate-pulse" />
-                          <div className="w-1.5 h-1.5 rounded-full bg-routex-teal/30" />
-                          <div className="w-1.5 h-1.5 rounded-full bg-routex-teal/30" />
-                       </div>
+                    <div className="text-right">
+                       <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">Estimated Arrival</p>
+                       <h3 className="text-3xl font-bold text-[var(--live)] font-['Clash_Display',sans-serif]">07:42 AM</h3>
                     </div>
                  </div>
-               </GlassPanel>
+
+                 <div className="mb-10 relative px-4">
+                    <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-[var(--border-glass)]" />
+                    <div className="absolute left-0 right-1/2 top-1/2 -translate-y-1/2 h-[2px] bg-[var(--primary)] shadow-[0_0_10px_var(--primary-glow)]" />
+                    <div className="flex justify-between items-center relative z-10">
+                       {[1, 2, 3, 4].map((s, i) => (
+                          <div key={s} className={`w-4 h-4 rounded-full border-2 transition-all duration-500 ${i <= 1 ? 'bg-[var(--primary)] border-[var(--primary)] shadow-[0_0_10px_var(--primary-glow)]' : 'bg-[var(--bg-elevated)] border-[var(--border-glass)]'}`} />
+                       ))}
+                    </div>
+                 </div>
+
+                 <div className="grid grid-cols-2 gap-4">
+                    <GlassPanel className="!p-6 !bg-[var(--bg-elevated)]/40 hover:!bg-[var(--bg-elevated)] transition-all">
+                       <MapPin className="w-5 h-5 text-[var(--primary)] mb-3" />
+                       <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">Next Hub</p>
+                       <h4 className="text-lg font-bold">Anna Nagar Stop</h4>
+                    </GlassPanel>
+                    <GlassPanel className="!p-6 !bg-[var(--bg-elevated)]/40 hover:!bg-[var(--bg-elevated)] transition-all">
+                       <Clock className="w-5 h-5 text-[var(--warning)] mb-3" />
+                       <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">Dilation</p>
+                       <h4 className="text-lg font-bold">-2 Mins Late</h4>
+                    </GlassPanel>
+                 </div>
+
+                 <div className="mt-8 pt-8 border-t border-[var(--border-glass)] flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                       <div className="w-12 h-12 rounded-2xl bg-[var(--bg-glass)] border border-[var(--border-glass)] flex items-center justify-center text-xl">👨‍✈️</div>
+                       <div>
+                          <p className="text-[9px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">COMMANDER</p>
+                          <h4 className="text-sm font-bold">Rajan Kumar</h4>
+                       </div>
+                    </div>
+                    <div className="flex gap-2">
+                       <button onClick={() => toast.success("Broadcasting Boarded Status")} className="px-6 py-3 bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                          I BOARDED
+                       </button>
+                       <button className="p-4 rounded-2xl bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20 hover:bg-[var(--primary)]/20 transition-all">
+                          <Phone className="w-5 h-5" />
+                       </button>
+                    </div>
+                 </div>
+              </div>
             </motion.div>
-
-            {/* SOS Button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => {
-                const conf = confirm("ACTIVATE EMERGENCY SOS?");
-                if (conf) {
-                  toast.error("SOS TRANSMITTED: EMERGENCY PROTOCOL ACTIVE", { duration: 10000 });
-                }
-              }}
-              className="fixed bottom-6 right-6 w-16 h-16 bg-routex-danger rounded-full z-50 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.5)]"
-            >
-               <Shield className="w-8 h-8 text-white" />
-               <motion.div 
-                 animate={{ scale: [1, 1.5, 2], opacity: [0.5, 0.2, 0] }}
-                 transition={{ duration: 2, repeat: Infinity }}
-                 className="absolute inset-0 border-4 border-routex-danger rounded-full"
-               />
-               <motion.div 
-                 animate={{ scale: [1, 1.3, 1.6], opacity: [0.3, 0.1, 0] }}
-                 transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                 className="absolute inset-0 border-4 border-routex-danger rounded-full"
-               />
-            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Alarm Modal Overlay */}
-      <AnimatePresence>
-        {alarmModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-background/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6">
-             <GlassPanel className="w-full max-w-sm p-8 text-center">
-                <Bell className="w-12 h-12 text-routex-teal mx-auto mb-6" />
-                <h3 className="text-2xl font-display tracking-widest mb-4">STOP ALARM</h3>
-                <p className="text-xs text-routex-textMuted mb-8 uppercase tracking-widest">Select your disembarkation point</p>
-                <select className="w-full bg-white/10 border border-white/20 p-4 rounded-xl outline-none mb-8 text-xs font-bold uppercase tracking-widest">
-                   <option>Anna Nagar Loop</option>
-                   <option>Koyambedu Hub</option>
-                   <option>Vadapalani Station</option>
-                   <option>College Gate</option>
-                </select>
-                <div className="flex gap-4">
-                   <button onClick={() => setAlarmModal(false)} className="flex-1 py-4 text-[10px] font-bold uppercase tracking-widest text-foreground/50 hover:text-white">Cancel</button>
-                   <button onClick={setAlarm} className="flex-1 py-4 bg-routex-teal text-routex-dark font-bold text-[10px] uppercase tracking-widest rounded-xl">Activate</button>
-                </div>
-             </GlassPanel>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Full Screen Alarm Trigger */}
-      <AnimatePresence>
-        {alarmActive && (
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }} 
-            animate={{ scale: 1, opacity: 1 }} 
-            className="fixed inset-0 z-[200] bg-routex-danger flex flex-col items-center justify-center p-10 text-center"
-          >
-             <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.5, repeat: Infinity }} className="p-8 bg-white rounded-full mb-10">
-                <Bell className="w-20 h-20 text-routex-danger" />
-             </motion.div>
-             <h2 className="text-7xl font-display tracking-widest text-white mb-6 uppercase">STOP NEARBY</h2>
-             <p className="text-xl font-bold text-white/80 uppercase tracking-[0.3em] mb-12">Anna Nagar Loop Is Next</p>
-             <button onClick={() => setAlarmActive(false)} className="px-12 py-5 bg-white text-routex-danger font-bold text-xs uppercase tracking-[0.5em] rounded-2xl shadow-2xl">
-                I&apos;m Wake Now
-             </button>
-             <div className="absolute inset-0 border-[20px] border-white/20 animate-pulse pointer-events-none" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      
+      {/* Cinematic Vignette */}
+      <div className="fixed inset-0 pointer-events-none z-[100] shadow-[inset_0_0_150px_rgba(0,0,0,0.4)]" />
     </div>
   );
 }

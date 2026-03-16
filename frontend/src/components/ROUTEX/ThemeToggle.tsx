@@ -12,18 +12,31 @@ export const ThemeToggle = () => {
 
   if (!mounted) return null;
 
+  const isDark = theme === "dark";
+
   return (
-    <motion.button
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="p-3 rounded-2xl bg-routex-glass border border-routex-glassBorder shadow-lg backdrop-blur-xl transition-all duration-300"
+    <div 
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="relative w-[88px] h-[36px] glass-panel p-1 flex items-center cursor-pointer overflow-hidden group select-none"
+      style={{ borderRadius: '99px' }}
     >
-      {theme === "dark" ? (
-        <Sun className="w-5 h-5 text-routex-primary" />
-      ) : (
-        <Moon className="w-5 h-5 text-routex-primary" />
-      )}
-    </motion.button>
+      {/* Sliding Background Pill */}
+      <motion.div
+        animate={{ x: isDark ? 0 : 48 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="absolute w-[36px] h-[28px] bg-[var(--primary)] rounded-full shadow-[0_0_15px_var(--primary-glow)]"
+      />
+
+      <div className="relative z-10 w-full flex justify-between px-2 items-center text-[10px] font-bold uppercase tracking-tighter">
+        <div className={`flex items-center gap-1 transition-colors duration-300 ${isDark ? 'text-white' : 'text-[var(--text-secondary)]'}`}>
+          <Moon className="w-3 h-3" />
+          <span>Dark</span>
+        </div>
+        <div className={`flex items-center gap-1 transition-colors duration-300 ${!isDark ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)]'}`}>
+          <Sun className="w-3 h-3" />
+          <span>Light</span>
+        </div>
+      </div>
+    </div>
   );
 };

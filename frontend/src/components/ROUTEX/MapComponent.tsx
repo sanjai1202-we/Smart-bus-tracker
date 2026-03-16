@@ -1,26 +1,37 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { io } from 'socket.io-client';
 import { useTheme } from 'next-themes';
+import 'leaflet/dist/leaflet.css';
 
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+const BUS_ICON_SVG = `
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="20" cy="20" r="18" fill="var(--primary)" fill-opacity="0.2" stroke="var(--primary)" stroke-width="2"/>
+    <circle cx="20" cy="20" r="8" fill="var(--primary)" class="animate-pulse shadow-[0_0_15px_var(--primary)]"/>
+    <circle cx="20" cy="20" r="15" stroke="var(--primary)" stroke-opacity="0.5" stroke-width="1">
+      <animate attributeName="r" from="8" to="20" dur="1.5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" from="0.8" to="0" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+  </svg>
+`;
 
-const createBusIcon = (color: string) => {
-  return L.divIcon({
-    className: 'custom-bus-icon',
-    html: `
-      <div class="relative w-8 h-8 flex items-center justify-center">
-        <div class="absolute inset-0 bg-[#06EFC5] rounded-full animate-pulse opacity-75 blur-[2px] shadow-[0_0_15px_#06EFC5]"></div>
-        <div class="relative w-6 h-6 bg-white dark:bg-[#08080F] border-[3px] border-[#06EFC5] rounded-full flex items-center justify-center"></div>
-      </div>
-    `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-  });
-};
+const createBusIcon = () => L.divIcon({
+  html: BUS_ICON_SVG,
+  className: 'custom-bus-icon',
+  iconSize: [40, 40],
+  iconAnchor: [20, 20],
+});
 
-const DEFAULT_CENTER: [number, number] = [12.9716, 77.5946];
+const DEFAULT_CENTER: [number, number] = [13.0827, 80.2707];
+
+function MapResizer() {
+  const map = useMap();
+  useEffect(() => {
+    setTimeout(() => map.invalidateSize(), 500);
+  }, [map]);
+  return null;
+}
 
 export default function MapComponent({ isGlobal = false, driverCoords = null }: { isGlobal?: boolean, driverCoords?: {lat: number, lng: number} | null }) {
   const { theme } = useTheme();
@@ -28,21 +39,13 @@ export default function MapComponent({ isGlobal = false, driverCoords = null }: 
   const [liveBuses, setLiveBuses] = useState<Record<string, any>>({});
   const socketRef = useRef<any>(null);
   
-  const busIconGreen = React.useMemo(() => createBusIcon('#00E87A'), []);
-  const busIconCyan = React.useMemo(() => createBusIcon('#00FFD1'), []);
-
   useEffect(() => {
     setMounted(true);
     const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5000';
     socketRef.current = io(socketUrl);
-    // ... rest of socket logic (same as before)
 
     socketRef.current.on('connect', () => {
       console.log('[Socket] Connected to map stream');
-      // For global view, we might want to join a general room or just listen to all updates
-      // The backend currently broadcasts to specific rooms, so for a "Global" view, 
-      // the backend would need to support a global broadcast or the client joins all rooms.
-      // For this prototype, we'll assume the driver_location is broadcasted or we listen to a specific event.
     });
 
     socketRef.current.on('bus_location_update', (data: any) => {
@@ -55,14 +58,13 @@ export default function MapComponent({ isGlobal = false, driverCoords = null }: 
       }));
     });
 
-    // Cleanup inactive buses every 30 seconds
     const interval = setInterval(() => {
       setLiveBuses(prev => {
         const now = Date.now();
         const next = { ...prev };
         let changed = false;
         Object.keys(next).forEach(id => {
-          if (now - next[id].lastSeen > 60000) { // 1 minute timeout
+          if (now - next[id].lastSeen > 60000) {
             delete next[id];
             changed = true;
           }
@@ -81,40 +83,47 @@ export default function MapComponent({ isGlobal = false, driverCoords = null }: 
     ? [driverCoords.lat, driverCoords.lng] 
     : (Object.values(liveBuses)[0] ? [Object.values(liveBuses)[0].lat, Object.values(liveBuses)[0].lng] : DEFAULT_CENTER);
 
-  if (!mounted) return <div className="absolute inset-0 bg-background animate-pulse" />;
+  if (!mounted) return <div className="absolute inset-0 bg-[var(--bg-elevated)] animate-pulse rounded-[24px]" />;
 
   const tileUrl = theme === 'dark' 
-    ? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
-    : "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
+    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 
   return (
-    <div className="absolute inset-0 z-0 bg-background overflow-hidden rounded-[24px]">
+    <div className="absolute inset-0 z-0 bg-[var(--bg-base)] overflow-hidden rounded-[24px] border border-[var(--border-glass)] shadow-2xl transition-all duration-500">
        <MapContainer 
          center={activePosition} 
          zoom={13} 
-         style={{ height: '100%', width: '100%' }} 
+         style={{ height: '100%', width: '100%', background: 'var(--bg-base)' }} 
          zoomControl={false} 
          attributionControl={false}
        >
          <TileLayer url={tileUrl} />
          
-         {/* Show all live buses if global, or just the current driver if provided */}
          {isGlobal ? (
            Object.values(liveBuses).map((bus: any) => (
-             <Marker key={bus.bus_id} position={[bus.lat, bus.lng]} icon={busIconCyan}>
+             <Marker key={bus.bus_id} position={[bus.lat, bus.lng]} icon={createBusIcon()}>
                <Tooltip direction="top" offset={[0, -10]} opacity={1} className="custom-tooltip">
-                 {bus.bus_id}
+                 <div className="bg-[var(--bg-elevated)] text-[var(--text-primary)] px-2 py-1 rounded-lg border border-[var(--border-glass)] text-[10px] font-bold">
+                   {bus.bus_id}
+                 </div>
                </Tooltip>
              </Marker>
            ))
          ) : (
            driverCoords && (
-             <Marker position={[driverCoords.lat, driverCoords.lng]} icon={busIconGreen}>
-                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent className="custom-tooltip">BUS LIVE</Tooltip>
+             <Marker position={[driverCoords.lat, driverCoords.lng]} icon={createBusIcon()}>
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent className="custom-tooltip">
+                  <div className="bg-[var(--primary)] text-white px-2 py-1 rounded-lg shadow-xl text-[10px] font-bold">BUS LIVE</div>
+                </Tooltip>
              </Marker>
            )
          )}
+         <MapResizer />
        </MapContainer>
+
+       {/* Cinematic Vignette */}
+       <div className="absolute inset-0 pointer-events-none z-[1000] shadow-[inset_0_0_100px_rgba(0,0,0,0.2)]" />
     </div>
   );
 }

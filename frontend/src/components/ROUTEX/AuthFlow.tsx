@@ -1,168 +1,248 @@
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Bus, Shield, Eye, EyeOff, UserCheck, Lock } from 'lucide-react';
+import { UserCircle, Mail, Lock, Shield, Info } from 'lucide-react';
 import { GlassPanel, PrimaryButton, FloatingInput, MeshBackground } from './Primitives';
 import toast from 'react-hot-toast';
 
+const MOCK_USERS: any = {
+  "student@college.edu": { 
+    password:"Student@123", role:"student",
+    name:"Priya Sharma", bus:"BUS007", 
+    stop:"Anna Nagar", parent:"+91 98765 43210" 
+  },
+  "driver001": { 
+    password:"Driver@123", role:"driver",
+    name:"Rajan Kumar", busCode:"BUS007" 
+  },
+  "admin": { 
+    password:"Admin@123", role:"admin", name:"Admin" 
+  }
+};
+
 export default function AuthFlow({ onLogin }: { onLogin: (role: 'student'|'driver'|'admin', user: any) => void }) {
-  const [activeTab, setActiveTab] = useState<'student'|'driver'|'admin'>('student');
+  const [role, setRole] = useState<'student' | 'driver' | 'admin'>('student');
+  const [formData, setFormData] = useState({ id: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const [showPass, setShowPass] = useState(false);
-  
-  // States
-  const [email, setEmail] = useState('');
-  const [empId, setEmpId] = useState('');
-  const [adminId, setAdminId] = useState('');
-  const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  const roles = [
-    { id: 'student', icon: GraduationCap, label: 'Student', hint: 'Use your college email' },
-    { id: 'driver', icon: Bus, label: 'Driver', hint: 'Use your driver ID' },
-    { id: 'admin', icon: Shield, label: 'Admin', hint: 'Authorized personnel only' }
-  ];
-
-  const handleLogin = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     setTimeout(() => {
-      setLoading(false);
-      let success = false;
-      let user = null;
-
-      if (activeTab === 'student') {
-        if (email === 'student@college.edu' && password === 'Student@123') {
-           success = true;
-           user = { name: "Priya Sharma", role: "student" };
-        } else if (empId || adminId) {
-          toast.error("Incorrect portal. Please use Student login.");
-        } else {
-          toast.error("Invalid student credentials");
-        }
-      } else if (activeTab === 'driver') {
-        if (empId === 'driver001' && password === 'Driver@123') {
-          success = true;
-          user = { name: "Rajan Kumar", role: "driver" };
-        } else if (email === 'student@college.edu') {
-          toast.error("These are student credentials. Select Student role.");
-        } else {
-          toast.error("Invalid driver credentials");
-        }
-      } else if (activeTab === 'admin') {
-        if (adminId === 'admin' && password === 'Admin@123') {
-          success = true;
-          user = { name: "Campus Admin", role: "admin" };
-        } else {
-          toast.error("Invalid admin credentials");
-        }
+      const user = MOCK_USERS[formData.id];
+      
+      if (!user) {
+        toast.error("Incorrect credentials. Please try again.");
+        setLoading(false);
+        return;
       }
 
-      if (success) {
-        toast.success(`Access Granted: Welcome ${user?.name}`);
-        onLogin(activeTab, user);
+      if (formData.password !== user.password) {
+        toast.error("Incorrect password. Please try again.");
+        setLoading(false);
+        return;
       }
+
+      // Strict role-locking rules
+      if (user.role === 'student' && role === 'driver') {
+        toast.error("These are student credentials. Switch to Student.");
+        setLoading(false);
+        return;
+      }
+      if (user.role === 'student' && role === 'admin') {
+        toast.error("Access denied. Admin credentials required.");
+        setLoading(false);
+        return;
+      }
+      if (user.role === 'driver' && role === 'student') {
+        toast.error("These are driver credentials. Switch to Driver.");
+        setLoading(false);
+        return;
+      }
+      if (user.role === 'driver' && role === 'admin') {
+        toast.error("Access denied. Admin credentials required.");
+        setLoading(false);
+        return;
+      }
+      if (user.role === 'admin' && role === 'student') {
+        toast.error("Admin credentials cannot access student portal.");
+        setLoading(false);
+        return;
+      }
+      if (user.role === 'admin' && role === 'driver') {
+        toast.error("Admin credentials cannot access driver portal.");
+        setLoading(false);
+        return;
+      }
+
+      setSuccess(true);
+      toast.success(`Access Granted: Welcome ${user.name}`);
+      setTimeout(() => {
+        onLogin(role, user);
+      }, 800);
     }, 1500);
   };
 
-  return (
-    <div className="relative min-h-screen flex items-center justify-center p-6 bg-background">
-      <MeshBackground variant={activeTab === 'student' ? 'indigo' : activeTab === 'driver' ? 'amber' : 'red'} />
+  const getRoleIcon = (r: string) => {
+    switch(r) {
+      case 'student': return '🎓';
+      case 'driver': return '🚌';
+      case 'admin': return '🛡️';
+      default: return '';
+    }
+  };
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-lg z-10"
-      >
-        <div className="text-center mb-12">
-          <motion.div 
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="inline-block p-4 bg-routex-teal/10 rounded-[30px] border border-routex-teal/20 mb-6"
-          >
-            <Bus className="w-12 h-12 text-routex-teal" />
-          </motion.div>
-          <h1 className="text-6xl font-display tracking-[0.2em] text-foreground">ROUTEX</h1>
-          <p className="font-display text-[10px] uppercase tracking-[0.6em] text-routex-textMuted mt-4 opacity-70">
-            Your Campus. Your Ride. Live.
-          </p>
+  return (
+    <div className="relative min-h-screen w-full flex flex-col lg:flex-row items-center justify-center p-6 overflow-hidden">
+      <MeshBackground />
+      
+      {/* Left Side: Brand Statement */}
+      <div className="w-full lg:w-[45%] flex flex-col justify-center items-start lg:pr-12 lg:pl-24 mb-12 lg:mb-0 z-10">
+        <div className="space-y-1 overflow-hidden">
+          {["TRACK.", "BOARD.", "ARRIVE."].map((word, i) => (
+            <motion.h1 
+              key={word}
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-6xl lg:text-8xl font-['Clash_Display',sans-serif] font-bold tracking-tighter leading-none text-[var(--text-primary)]"
+            >
+              {word}
+            </motion.h1>
+          ))}
+        </div>
+        
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ delay: 0.6, duration: 1 }}
+          className="mt-8 text-lg font-['Satoshi',sans-serif] text-[var(--text-secondary)] tracking-wide max-w-sm"
+        >
+          Real-time college bus intelligence for modern campuses. Experience the future of student transit.
+        </motion.p>
+
+        <div className="mt-12 flex flex-wrap gap-3">
+          {[
+            { icon: '📍', label: 'Live GPS Tracking' },
+            { icon: '🔔', label: 'Smart Alerts' },
+            { icon: '👨‍👩‍👧', label: 'Parent Updates' }
+          ].map((pill, i) => (
+            <motion.div
+              key={pill.label}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8 + (i * 0.1), duration: 0.5 }}
+              className="px-4 py-2 glass-panel !rounded-full text-[10px] font-bold uppercase tracking-widest text-[var(--text-primary)] flex items-center gap-2"
+            >
+              <span>{pill.icon}</span> {pill.label}
+            </motion.div>
+          ))}
         </div>
 
-        <GlassPanel className="relative p-10 overflow-hidden">
-          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-transparent via-routex-primary to-transparent opacity-20" />
-          
-          {/* Role Selector */}
-          <div className="grid grid-cols-3 gap-3 mb-12 bg-white/5 p-1.5 rounded-[22px]">
-            {roles.map(role => (
-              <button
-                key={role.id}
-                onClick={() => { setActiveTab(role.id as any); setPassword(''); }}
-                className={`flex flex-col items-center gap-2 py-4 rounded-[18px] transition-all relative overflow-hidden ${activeTab === role.id ? 'bg-routex-primary/20 text-foreground border border-routex-primary/40 shadow-xl' : 'text-routex-textMuted hover:text-foreground'}`}
-              >
-                <role.icon className={`w-5 h-5 ${activeTab === role.id ? 'text-routex-teal' : ''}`} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{role.label}</span>
-                {activeTab === role.id && (
-                  <motion.div layoutId="tabGlow" className="absolute inset-0 bg-routex-primary/10 blur-xl" />
-                )}
-              </button>
-            ))}
-          </div>
+        <div className="mt-16 flex items-center gap-3 opacity-40 grayscale group hover:grayscale-0 transition-all duration-500">
+          <div className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center text-white font-bold italic">R</div>
+          <span className="font-['Clash_Display',sans-serif] font-bold tracking-[0.4em] text-xl">ROUTEX</span>
+        </div>
+      </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+      {/* Right Side: Login Card */}
+      <div className="w-full lg:w-[55%] flex items-center justify-center z-10 relative">
+        {/* Subtle bloom behind card */}
+        <div className="absolute w-[400px] h-[400px] bg-[var(--primary)] opacity-[0.08] blur-[120px] rounded-full animate-pulse" />
+        
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-[500px] animate-float px-2"
+        >
+          <GlassPanel className="!p-8 md:!p-16 border-[var(--border-glass)] shadow-[0_8px_64px_rgba(0,0,0,0.4)]">
+            <header className="mb-12">
+               <div className="flex justify-between items-center mb-10 pb-2 gap-3">
+                  {(['student', 'driver', 'admin'] as const).map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRole(r)}
+                      className={`flex-1 p-4 rounded-3xl border-2 transition-all duration-300 flex flex-col items-center gap-2 group ${role === r ? 'border-[var(--primary)] bg-[var(--primary)]/20 shadow-[0_0_20px_var(--primary-glow)] scale-105' : 'border-[var(--border-glass)] bg-transparent hover:border-[var(--primary)]/40'}`}
+                    >
+                      <span className={`text-2xl transition-all duration-300 ${role === r ? 'scale-110 drop-shadow-[0_0_8px_var(--primary)]' : 'opacity-40 grayscale'}`}>
+                        {getRoleIcon(r)}
+                      </span>
+                      <span className={`text-[10px] uppercase font-bold tracking-widest transition-all duration-300 ${role === r ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] opacity-60'}`}>
+                        {r}
+                      </span>
+                    </button>
+                  ))}
+               </div>
+            </header>
+
             <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
+              <motion.form
+                key={role}
+                initial={{ opacity: 0, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, filter: 'blur(8px)' }}
+                transition={{ duration: 0.25 }}
+                onSubmit={handleSubmit}
+                className="space-y-6"
               >
-                {activeTab === 'student' && (
-                  <FloatingInput label="Academic Email" value={email} onChange={(e: any) => setEmail(e.target.value)} icon={UserCheck} />
+                {role === 'student' && (
+                  <FloatingInput 
+                    label="ACADEMIC EMAIL" 
+                    icon={Mail} 
+                    value={formData.id} 
+                    onChange={(e: any) => setFormData({...formData, id: e.target.value})} 
+                  />
                 )}
-                {activeTab === 'driver' && (
-                  <FloatingInput label="Employee Personal ID" value={empId} onChange={(e: any) => setEmpId(e.target.value)} icon={UserCheck} />
+                {role === 'driver' && (
+                  <FloatingInput 
+                    label="EMPLOYEE ID" 
+                    icon={UserCircle} 
+                    value={formData.id} 
+                    onChange={(e: any) => setFormData({...formData, id: e.target.value})} 
+                  />
                 )}
-                {activeTab === 'admin' && (
-                  <div className="relative">
-                    <Shield className="absolute right-4 top-4 w-5 h-5 text-routex-amber opacity-50 z-20" />
-                    <FloatingInput label="Administrator ID" value={adminId} onChange={(e: any) => setAdminId(e.target.value)} icon={Lock} />
-                  </div>
+                {role === 'admin' && (
+                  <FloatingInput 
+                    label="ADMINISTRATOR ID" 
+                    icon={Shield} 
+                    value={formData.id} 
+                    onChange={(e: any) => setFormData({...formData, id: e.target.value})} 
+                  />
                 )}
 
-                <div className="relative">
-                  <FloatingInput label="Security Pin" type={showPass ? "text" : "password"} value={password} onChange={(e: any) => setPassword(e.target.value)} icon={Lock} />
-                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-4 text-slate-500 hover:text-foreground transition-colors">
-                    {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
+                <FloatingInput 
+                  label="SECURE PASSWORD" 
+                  type="password" 
+                  icon={Lock} 
+                  value={formData.password} 
+                  onChange={(e: any) => setFormData({...formData, password: e.target.value})} 
+                />
+
+                <p className="text-[10px] text-[var(--text-secondary)] opacity-60 italic tracking-widest font-['Satoshi',sans-serif] flex items-center gap-2">
+                  <Info className="w-3 h-3" />
+                  {role === 'student' ? 'Use your institution email address' : role === 'driver' ? 'Contact admin if you forgot your ID' : 'Authorized personnel only'}
+                </p>
+
+                <div className="pt-6">
+                  <PrimaryButton loading={loading} success={success}>
+                    Initialize Portal
+                  </PrimaryButton>
                 </div>
-              </motion.div>
+              </motion.form>
             </AnimatePresence>
 
-            <div className="pt-4">
-              <PrimaryButton disabled={loading}>
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Authenticating...
-                  </span>
-                ) : (
-                  "Infiltrate Portal"
-                )}
-              </PrimaryButton>
-            </div>
-            
-            <p className="text-center text-[10px] text-routex-textMuted uppercase tracking-widest opacity-50">
-              {roles.find(r => r.id === activeTab)?.hint}
-            </p>
-          </form>
-        </GlassPanel>
-
-        <footer className="mt-12 text-center">
-           <p className="text-[10px] text-routex-textMuted uppercase tracking-[0.4em] opacity-40">Identity Systems V3.0 (Project Routex)</p>
-        </footer>
-      </motion.div>
+            <footer className="mt-12 text-center">
+               <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-[0.3em] font-['Satoshi',sans-serif]">
+                 Request Access? <span className="text-[var(--text-accent)] cursor-pointer hover:underline">Contact Cloud Admin</span>
+               </p>
+            </footer>
+          </GlassPanel>
+        </motion.div>
+      </div>
     </div>
   );
 }
